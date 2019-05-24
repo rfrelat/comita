@@ -1,3 +1,4 @@
+library(comita)
 require(ForeCA)
 require(ade4)
 require(MARSS)
@@ -8,7 +9,6 @@ require(RColorBrewer)
 require(vegan)
 require(freqdom)
 require(fastICA)
-library(comita)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {

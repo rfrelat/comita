@@ -1,0 +1,13 @@
+name: comita
+title: comita
+username:
+account: rfrelat
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 947413
+bundleId: 2106523
+url: https://rfrelat.shinyapps.io/comita/
+when: 1558708183.60637
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: README.md
