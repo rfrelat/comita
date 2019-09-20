@@ -4,8 +4,7 @@
 \alias{multita}
 \title{Run multiple Integrated Trend Analysis}
 \usage{
-multita(dat, npc, met = c(1, 2), sca = TRUE, logt = FALSE,
-  detrend = FALSE)
+multita(dat, npc, met = c(1, 2), sca = TRUE, logt = FALSE)
 }
 \arguments{
 \item{dat}{matrix with}
@@ -20,7 +19,7 @@ multita(dat, npc, met = c(1, 2), sca = TRUE, logt = FALSE,
 }
 \value{
 A list of output from \code{ita} with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} scores of the variables on the new dimensions (if any)
 \item \code{eig} eigen values (for PCA associated methods)
@@ -35,7 +34,7 @@ Run multiple Integrated Trend Analysis
 }
 \details{
 Variable \code{met} are either string or number indicating: 
-\describe{
+\itemize{
 \item \code{ita.pca} eeee
 \item \code{ita.pcaV} scores of the variables on the new dimensions (if any)
 \item \code{ita.} eigen values (for PCA associated methods)

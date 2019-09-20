@@ -71,7 +71,7 @@ maf <- function(formula,data){
   if(length(data[,1])==1) stop("Cannot be run with only one sample.")
   
   # PCA of original variables
-  bidpr<-prcomp(formula,data,scale=TRUE)
+  bidpr<-stats::prcomp(formula,data,scale=TRUE)
   bidn<-sum(bidpr$sdev>1e-10)
   if(bidn<2) stop("stop: strictly less than two PCs")
   bidpr$sdev<-bidpr$sdev[1:bidn]

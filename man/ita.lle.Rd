@@ -13,7 +13,7 @@ ita.lle(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} NULL - no scores of the variables on the new dimensions 
 \item \code{eig} NULL 
@@ -27,9 +27,6 @@ Run Local Linear Embedding
 }
 \note{
 Use function lle from the lle package.
-}
-\examples{
-
 }
 \references{
 Roweis ST (2000) Nonlinear Dimensionality Reduction by Locally Linear Embedding. Science (80- ) 290:2323–2326

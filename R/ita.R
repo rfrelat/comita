@@ -1,12 +1,11 @@
-#Define the multiple methods to compute Integrative Trend Analysis
-
+# Define the multiple methods to compute Integrative Trend Analysis
 # ita.pca ---------------------------------------
 #' Internal function to run a Principal Component analysis
 #'
 #' @param dat matrix with 
 #' @param npc number of selected principal components
 #' @return Result of multivariate analysis with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -14,17 +13,11 @@
 #' \item \code{npc} number of selected principal component
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
-#' 
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
-#'
-#' @examples
-#'
 #' @export
-#' @examples
 #'
 ita.pca<- function(dat, npc){
   #use ade4 package to compute pca #require(ade4)
-  mvar <- dudi.pca(dat, nf=npc, scannf = FALSE, center = FALSE, scale = FALSE)
+  mvar <- ade4::dudi.pca(dat, nf=npc, scannf = FALSE, center = FALSE, scale = FALSE)
   pvar <- getpvar(mvar$li, mvar$co, dat, npc)
   res <- list("ts"=mvar$li, "co"=mvar$co, "eig"= mvar$eig, 
               "pvar"=pvar, "dat"=dat, "npc"=npc, "mita"="PCA")
@@ -37,7 +30,7 @@ ita.pca<- function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of selected principal components
 #' @return Result of multivariate analysis with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -46,12 +39,11 @@ ita.pca<- function(dat, npc){
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
 #' @export
-#' @examples
 #'
 ita.pcaV<- function(dat, npc){
-  mvar <- dudi.pca(dat, nf=npc, scannf = FALSE, center = TRUE, scale = TRUE)
+  mvar <- ade4::dudi.pca(dat, nf=npc, scannf = FALSE, center = TRUE, scale = TRUE)
   rawLoadings     <- as.matrix(mvar$co[,1:npc]) #%*% diag(sqrt(mvar$eig), npc, npc)
-  vari <- varimax(rawLoadings)
+  vari <- stats::varimax(rawLoadings)
   ts <- scale(mvar$li[,1:npc]) %*% vari$rotmat
   co <- unclass(vari$loadings)
   pvar <- getpvar(ts, co, dat, npc) 
@@ -66,7 +58,7 @@ ita.pcaV<- function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Result of multivariate analysis with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -77,11 +69,8 @@ ita.pcaV<- function(dat, npc){
 #' @note R code inspired from https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html
 #' Holmes, E. E., M. D. Scheuerell, and E. J. Ward. Applied time series analysis for fisheries and environmental data. NOAA Fisheries, Northwest Fisheries Science Center, 2725 Montlake Blvd E., Seattle, WA 98112.
 #' @references Zuur AF, Fryer RJ, Jolliffe IT, Dekker R, Beukema JJ (2003) Estimating common trends in multivariate time series using dynamic factor analysis. Environmetrics 14:665–685
-#' @export
-#' @examples
-#'
+#' 
 ita.dfa <- function(dat, npc){
-  require(MARSS)
   #parameters 
   mm <- npc ## number of processes
   BB <- "identity"  # diag(mm) ## 'BB' is identity: 1's along the diagonal & 0's elsewhere
@@ -113,12 +102,12 @@ ita.dfa <- function(dat, npc){
   
   ## fit MARSS
   ret <- as.matrix(t(dat))
-  mvar <- MARSS(y=ret, model=mod_list, inits=init_list, control=con_list)
+  mvar <- MARSS::MARSS(y=ret, model=mod_list, inits=init_list, control=con_list)
   
   ## get the estimated ZZ
   Z_est <- coef(mvar, type="matrix")$Z
   ## get the inverse of the rotation matrix
-  H_inv <- varimax(Z_est)$rotmat
+  H_inv <- stats::varimax(Z_est)$rotmat
   ## rotate factor loadings
   Z_rot = Z_est %*% H_inv   
   ## rotate processes
@@ -139,7 +128,7 @@ ita.dfa <- function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -148,14 +137,14 @@ ita.dfa <- function(dat, npc){
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
 #' @note lag set to 1, which correspond to AR1 processes
+#' Function based on dpca from freqdom package
 #' @references 
 #' Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
 #' Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
 #' @export
-#' @examples
 #'
 ita.dpca<-function(dat, npc){
-  mvar <- dpca(dat, q=1, Ndpc = npc)
+  mvar <- freqdom::dpca(dat, q=1, Ndpc = npc)
   ts <- mvar$scores
   co <- apply(mvar$filters$operators, c(2,1), mean)
   #or lag0: mvar$filters$operators[,,2]
@@ -170,7 +159,7 @@ ita.dpca<-function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -190,7 +179,7 @@ ita.mafa<-function(dat, npc){
   #replace column names with space
   colnames(dat)<- gsub(" ", "", oldnames)
   #create formula from names
-  fo<-as.formula(paste("~",sapply(list(colnames(dat)), paste, collapse="+"),sep=""))
+  fo<-stats::as.formula(paste("~",sapply(list(colnames(dat)), paste, collapse="+"),sep=""))
   #compute MAF
   mvar <- maf(fo,as.data.frame(dat))
   ts <- as.matrix(mvar$x[,1:npc])
@@ -207,7 +196,7 @@ ita.mafa<-function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time on the principal component
 #' \item \code{co} scores of the variables on the principal component
 #' \item \code{eig} eigen values
@@ -218,16 +207,14 @@ ita.mafa<-function(dat, npc){
 #' @note Use function estTSF.ML from tsfa package.
 #' @references 
 #' Gilbert PD, & Meijer E (2005) Time series factor analysis with an application to measuring money. University of Groningen, Research School SOM Research Report 05F10.
-#' @export
-#' @examples
 #'
 ita.tsfa<-function(dat, npc){
-  require(tsfa)
   if(ncol(dat)>nrow(dat)){
+    warning("higher number of variables than number of years")
     return(list("ts"=NULL, "co"=NULL, "eig"= NULL, 
                 "pvar"=NULL, "dat"=dat, "npc"=npc, "mita"="TSFA"))
   } else {
-    mvar <- estTSF.ML(dat, p = npc, diff. = F)
+    mvar <- tsfa::estTSF.ML(dat, p = npc, diff. = F)
     pvar <- getpvar(mvar$f, mvar$loadings, dat, npc)
     res <- list("ts"=mvar$f, "co"=mvar$loadings, "eig"= NULL, 
                 "pvar"=pvar, "dat"=dat, "npc"=npc, "mita"="TSFA")
@@ -239,7 +226,7 @@ ita.tsfa<-function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} NULL - no scores of the variables on the new dimensions 
 #' \item \code{eig} NULL 
@@ -248,10 +235,9 @@ ita.tsfa<-function(dat, npc){
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
 #' @export
-#' @examples
 #'
 ita.mds <- function(dat, npc){
-  mvar<- cmdscale(dist(dat), k=2, eig=TRUE)
+  mvar<- stats::cmdscale(stats::dist(dat), k=2, eig=TRUE)
   co <- crossprod(as.matrix(dat), as.matrix(mvar$points))
   #co <- wascores(mvar$points, dat) #from vegan package
   pvar <- getpvar(mvar$points, co, dat, npc) #compute variance explained
@@ -264,7 +250,7 @@ ita.mds <- function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} NULL - no scores of the variables on the new dimensions 
 #' \item \code{eig} NULL 
@@ -276,11 +262,10 @@ ita.mds <- function(dat, npc){
 #' @references 
 #' Roweis ST (2000) Nonlinear Dimensionality Reduction by Locally Linear Embedding. Science (80- ) 290:2323–2326
 #' @export
-#' @examples
 #'
 ita.lle<-function(dat, npc){
-  nk <- calc_k(dat,npc, kmin=1, kmax=ncol(dat)-1, plotres = FALSE)
-  mvar <- lle(dat, m=npc, k=which.min(nk$rho), reg=2, ss=FALSE, id=TRUE, v=0.99)
+  nk <- lle::calc_k(dat,npc, kmin=1, kmax=ncol(dat)-1, plotres = FALSE)
+  mvar <- lle::lle(dat, m=npc, k=which.min(nk$rho), reg=2, ss=FALSE, id=TRUE, v=0.99)
   eig <- nk$rho # Not really eig !!
   ts <- as.matrix(mvar$Y)[,1:npc]
   #co <- NULL # LLE do not give variables scores
@@ -297,7 +282,7 @@ ita.lle<-function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} NULL - no scores of the variables on the new dimensions 
 #' \item \code{eig} NULL 
@@ -310,11 +295,9 @@ ita.lle<-function(dat, npc){
 #' Back AD, Weigend AS (1997) A First Application of Independent Component Analysis to Extracting Structure from Stock Returns. Int J Neural Syst 08:473–484
 #' Blaschke T, Berkes P, Wiskott L (2006) What Is the Relation Between Slow Feature Analysis and Independent Component Analysis? Neural Comput 18:2495–2508
 #' @export
-#' @examples
 #'
 ita.ica<- function(dat, npc){
-  require(fastICA)
-  mvar <- fastICA(dat, n.comp=npc)
+  mvar <- fastICA::fastICA(dat, n.comp=npc)
   tdat <- mvar$X
   co <- as.data.frame(t(mvar$A))
   #mvar$A change a lot depending on the initialization
@@ -331,7 +314,7 @@ ita.ica<- function(dat, npc){
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} NULL - no scores of the variables on the new dimensions 
 #' \item \code{eig} NULL 
@@ -344,12 +327,11 @@ ita.ica<- function(dat, npc){
 #' Wiskott L, Sejnowski TJ (2002) Slow Feature Analysis: Unsupervised Learning of Invariances. Neural Comput 14:715–770
 #' Blaschke T, Berkes P, Wiskott L (2006) What Is the Relation Between Slow Feature Analysis and Independent Component Analysis? Neural Comput 18:2495–2508
 #' @export
-#' @examples
 #'
 ita.sfa<- function(dat, npc){
   # would be better to use rSFA package, sfa1 or sfa2 function
   # mvar <- sfa1(dat)
-  mvar <- sfa(dat, n.comp = npc)#, spectrum.control = list(method = "wosa"))
+  mvar <- ForeCA::sfa(dat, n.comp = npc)#, spectrum.control = list(method = "wosa"))
   ts <- mvar$scores[,1:npc]
   co <- mvar$weightvectors[,1:npc] #or mvar$loadings or mvar$loadings.normalized
   pvar <- getpvar(ts, co, dat, npc)
@@ -358,12 +340,12 @@ ita.sfa<- function(dat, npc){
   return(res)
 }
 
-#ita.sfa ----------------------------------------
+#ita.fca ----------------------------------------
 #' Run Forecastable Component Analysis
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} NULL - no scores of the variables on the new dimensions 
 #' \item \code{eig} NULL 
@@ -376,7 +358,6 @@ ita.sfa<- function(dat, npc){
 #' @references 
 #' Goerg GM (2013) Forecastable Component Analysis. In: Proceedings of the 30th International Conference on Machine Learning.p 64–72
 #' @export
-#' @examples
 #'
 ita.fca<- function(dat, npc){
   if(ncol(dat)>nrow(dat)){
@@ -385,7 +366,7 @@ ita.fca<- function(dat, npc){
                 "pvar"=NULL, "dat"=dat, "npc"=npc, "mita"="FCA"))
   } else {
     ret <- ts(dat) #no diff here, ok?
-    mvar <- foreca(ret, n.comp = ncol(dat)-1)#, spectrum.control = list(method = "wosa"))
+    mvar <- ForeCA::foreca(ret, n.comp = ncol(dat)-1)#, spectrum.control = list(method = "wosa"))
     ts <- as.matrix(mvar$scores[,1:npc])
     co <- as.matrix(mvar$weightvectors[,1:npc]) #or mvar$loadings or mvar$loadings.normalized
     pvar <- getpvar(ts, co, dat, npc)
@@ -405,7 +386,7 @@ ita.fca<- function(dat, npc){
 #' @param logt whether the culumns are log-transformed (default=FALSE)
 #' @details
 #' Variable \code{met} are either string or number indicating: 
-#' \describe{
+#' \itemize{
 #' \item \code{ita.pca} scores of the time series on the new dimensions 
 #' \item \code{ita.pcaV} scores of the variables on the new dimensions (if any)
 #' \item \code{ita.} eigen values (for PCA associated methods)
@@ -414,7 +395,7 @@ ita.fca<- function(dat, npc){
 #' \item \code{ita.} method used for integrated trend analysis 
 #' }
 #' @return Output of ITA with 
-#' \describe{
+#' \itemize{
 #' \item \code{ts} scores of the time series on the new dimensions 
 #' \item \code{co} scores of the variables on the new dimensions (if any)
 #' \item \code{eig} eigen values (for PCA associated methods)
@@ -422,17 +403,23 @@ ita.fca<- function(dat, npc){
 #' \item \code{npc} number of new dimensions
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
-#' @note 
 #' @export
 #' @examples
+#' # Load data
+#' data(baltic)
+#' #  Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Plot eigen values
+#' plot_eig(mvar)
+#' # Plot scores of years
+#' plot_timeseries(mvar)
+#' # Plot scores of variables
+#' plot_var(mvar)
 #'
-ita <- function(dat, npc, met=1, sca=TRUE, logt=FALSE, detrend=FALSE){
+ita <- function(dat, npc, met=1, sca=TRUE, logt=FALSE){
   #Pre-process the dataset
   if (logt){
     dat <- log(dat+ifelse(min(dat)<=0, abs(min(dat))+1, 0))
-  }
-  if (detrend){
-    dat <- apply(dat, 2, diff) #detrend variables
   }
   if (sca){
     dat <- scale(dat) #rescale variables

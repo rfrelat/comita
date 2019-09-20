@@ -1,10 +1,10 @@
 # Functions to create the different plots to compare methods for Integrative Trend Analysis
 
-# plot.heatmap ---------------------------------------
+# plot_heatmap ---------------------------------------
 #' Create a heatmap
 #'
 #' @param mvar results of multivariate analysis (from ita function)
-#' @param col palette of colors
+#' @param col palette of colors (by default, traffic light colors)
 #' @param n selected dimension to order the variables (default n=1) 
 #' @param shortname short name of the variables, for plotting
 #' @return A heatmap
@@ -12,9 +12,15 @@
 #' @author Romain Frelat, \email{rom.frelat@gmail.com}
 #' @keywords heatmap
 #' @examples
+#' data(baltic)
+#' # Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Create heatmap
+#' plot_heatmap(mvar)
 #' @export
 #'
-plot.heatmap <- function(mvar, col, n=1, shortname=short(colnames(mvar$dat))){
+plot_heatmap <- function(mvar, col=c("springgreen4","chartreuse3","yellow","darkgoldenrod1", "red"), 
+                         n=1, shortname=short(colnames(mvar$dat))){
   odPC <- order(mvar$co[,n])
   bk <- quantile(mvar$dat, probs = seq(0,1,length.out = length(col)+1))
   bk <- bk + c(-0.1, rep(0,length(col)-1), 0.1) #to be sure to include all values
@@ -26,7 +32,7 @@ plot.heatmap <- function(mvar, col, n=1, shortname=short(colnames(mvar$dat))){
        labels = shortname[odPC], las=1, xpd=NA)
 } 
 
-# plot.timeseries ---------------------------------------
+# plot_timeseries ---------------------------------------
 #' Plot time series of scores on the reduced dimensions
 #'
 #' @param mvar results of multivariate analysis (from ita function)
@@ -36,9 +42,15 @@ plot.heatmap <- function(mvar, col, n=1, shortname=short(colnames(mvar$dat))){
 #' @author Romain Frelat, \email{rom.frelat@gmail.com}
 #' @keywords time series
 #' @examples
+#' # Load data
+#' data(baltic)
+#' #  Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Plot scores of years
+#' plot_timeseries(mvar)
 #' @export
 #'
-plot.timeseries <- function(mvar, xax=3){
+plot_timeseries <- function(mvar, xax=1){
   yr <- as.numeric(row.names(mvar$dat))
   limy <- range(mvar$ts, na.rm=TRUE)+c(-1,1)*(diff(range(mvar$ts, na.rm=TRUE))*0.05)
   limx <- range(yr)+c(-0.5, 0.5)
@@ -54,11 +66,13 @@ plot.timeseries <- function(mvar, xax=3){
   }
 }
 
-# plot.eig ---------------------------------------
+# plot_eig ---------------------------------------
 #' Plot eigen values from multivariate analysis
 #'
 #' @param mvar results of multivariate analysis (from ita function)
-#' @param xax aestetic aspect, to plot xaxis on top of the graph 
+#' @param leg whether legend is plotted (default = TRUE)
+#' @param cum whether cumulative variance explained is plotted (default = FALSE) 
+#' @param ... other argument for plot
 #' @return A barplot of eigen vectors with percentage of variance explained in the successive components.
 #' Also return an object with 
 #' \itemize{
@@ -66,16 +80,24 @@ plot.timeseries <- function(mvar, xax=3){
 #' \item \code{perc} percentage of variance explained in the successive PC
 #' }
 #'
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
 #' @keywords time series
 #' @examples
+#' # Load data
+#' data(baltic)
+#' # Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Plot scores of years
+#' plot_eig(mvar)
 #' @export
-#'
-plot.eig <- function(mvar, leg=TRUE, ...){
+#' 
+plot_eig <- function(mvar, leg=TRUE, cum=FALSE, ...){
   #check if eig is not null
   if (!is.null(mvar$eig)){
     coleig <- c(rep("black", mvar$npc), rep("grey", length(mvar$eig)-mvar$npc))
     perc <- mvar$eig/sum(mvar$eig)*100
+    if (cum) {
+      perc <- cumsum(perc)
+    }
     barx <- barplot(perc, col=coleig, ylab="%", axisnames = FALSE, ...)
     if (leg){
       txtleg <- paste("PC", 1:(mvar$npc+1), ":", round(mvar$eig/sum(mvar$eig)*100)[1:(mvar$npc+1)], "%")
@@ -88,7 +110,7 @@ plot.eig <- function(mvar, leg=TRUE, ...){
   }
 }
 
-# plot.var --------------------------------------
+# plot_var --------------------------------------
 #' Plot the scores of variables on reduced dimensions
 #'
 #' @param mvar results of multivariate analysis (from ita function)
@@ -97,21 +119,27 @@ plot.eig <- function(mvar, leg=TRUE, ...){
 #' @author Romain Frelat, \email{rom.frelat@gmail.com}
 #' @keywords time series
 #' @examples
+#' # Load data
+#' data(baltic)
+#' #  Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Plot scores of variables
+#' plot_var(mvar)
 #' @note Use s.arrow from ade4 r-package if more than one axis, else a dotchart()
 #' @export
-#'
-plot.var <- function(mvar){
+#' 
+plot_var <- function(mvar){
   lab <- colnames(mvar$dat)
   if (mvar$npc>1){
     limx <- range(mvar$co[,1])+ c(-1,1)*rep(diff(range(mvar$co[,1]))/7,2)
-    s.arrow(mvar$co, label = lab, clabel = 0.8, xlim = limx)
+    ade4::s.arrow(mvar$co, label = lab, clabel = 0.8, xlim = limx)
   } else {
     odPC <- order(mvar$co[,1])
     dotchart(mvar$co[odPC], labels = lab)
   }
 }
 
-# plot.compts ---------------------------------------
+# plot_compts ---------------------------------------
 #' Visualy compare the scores of the time series on reduced dimensions
 #' from different methods of Integrated Trend Analysis
 #'
@@ -121,13 +149,17 @@ plot.var <- function(mvar){
 #' @param pc which dimension to plot (default pc=1)
 #' @param showleg whether to plot a legend (default showleg = TRUE)
 #' @return The pairwize correlation of time series score compared with the first ITA of multimvar
-#'
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
 #' @keywords time series
 #' @examples
+#' # Load data
+#' data(baltic)
+#' # Run ita
+#' multi <- multita(baltic, npc=2, met=c("pca", "tsfa"))
+#' # Compare scores of time series
+#' plot_compts(baltic, multi)
 #' @export
 #'
-plot.compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), pc=1, showleg=TRUE){
+plot_compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), pc=1, showleg=TRUE){
   yr <- as.numeric(row.names(dat))
   #maxabs <- unlist(lapply(multimvar, function(x) max(abs(x$ts[,1]))))
   #limY <- c(-maxabs, maxabs)
@@ -168,7 +200,7 @@ plot.compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"
   }
 }
 
-# plot.compvar ---------------------------------------
+# plot_compvar ---------------------------------------
 #' Visually compare the scores of the variables on reduced dimensions
 #' from different methods of Integrated Trend Analysis
 #'
@@ -180,13 +212,15 @@ plot.compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"
 #' @param shortname short name of the variables, use for plotting only
 #'
 #' @return The pairwize correlation of variable scores compared to the first ITA of \code{multimvar}.
-#'
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
-#' @keywords 
 #' @examples
+#' #' # Load data
+#' data(baltic)
+#' # Run ita
+#' multi <- multita(baltic, npc=2, met=c("pca", "tsfa"))
+#' plot_compvar(baltic, multi)
 #' @export
 #'
-plot.compvar <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), 
+plot_compvar <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), 
                          pc=1, showleg=TRUE, shortname=short(colnames(dat))){
   lab <- shortname
   odPC <- order(multimvar[[1]]$co[,pc])
@@ -233,29 +267,69 @@ plot.compvar <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2
   }
 }
 
-# plot.nrand ---------------------------------------
+# plot_nrand ---------------------------------------
 #' Compare the eigen values with randomly created matrices.
 #'
 #' @param mvar results of ita on original dataset (from ita function)
 #' @param reig eig results from randomly created matrices (from ita.nrand function)
-#' @param col color of the 95% confidence interval of \code{reig}
+#' @param col color of the 95\% confidence interval of \code{reig}
+#' @param cum whether cumulative variance explained is plotted (default = FALSE) 
 #'
-#' @return Plot of eigen values with 95% confidence interval.
+#' @return Plot of eigen values with 95\% confidence interval.
 #' @examples
+#' # Load data
+#' data(baltic)
+#' # Run ita
+#' mvar <- ita(baltic, npc=2)
+#' # Eigen values with multiple randomly generated data
+#' mrand <- ita.nrand(baltic)
+#' # Graphic comparing eigen values
+#' plot_nrand(mvar, mrand)
+#' 
+#' # Or with multiple null model
+#' randlist <- list("rand"=ita.nrand(baltic, metrand = "rand"),
+#'                  "phase"=ita.nrand(baltic, metrand = "phase"))
+#' plot_nrand(mvar, randlist, col=c("red", "blue"))
 #' @export
 #'
-plot.nrand <- function(mvar, reig, col="blue"){
-  #95% threshold
-  eig95 <- apply(reig,2,q95)
-  info <- plot.eig(mvar, leg=FALSE, ylim=range(c(mvar$eig/sum(mvar$eig)*100, eig95)))
-  lines(info$barx, eig95, col=col, type="b", pch=18, xpd=NA)
-  points(info$barx, eig95, col=col, pch=18, xpd=NA)
-  signif <- info$perc>eig95
-  star <- ifelse(signif, "*", "")
-  text(x= info$barx, y= max(info$perc) + 1, star, xpd=NA, col=col)
+plot_nrand <- function(mvar, reig, col="blue", cum=FALSE){
+  if(is.list(reig)){
+    info <- plot_eig(mvar, leg=FALSE, cum=cum)
+    if (length(reig)!= length(col)){
+      warning("Number of colors doesn't match the number of null models")
+      col <- rep(col, length.out=length(reig))
+    }
+    for (i in 1:length(reig)){
+      eig95 <- apply(reig[[i]],2,q95)
+      if (cum){
+        cumeig <- t(apply(reig[[i]],1,cumsum))
+        eig95 <- apply(cumeig,2,q95)
+      }
+      lines(info$barx, eig95, col=col[i], 
+            type="b", pch=18, xpd=NA)
+      signif <- info$perc>eig95
+      star <- ifelse(signif, "*", "")
+      text(x= info$barx, y= max(info$perc) + i*0.5, star, xpd=NA, col=col[i])
+    }
+    legend("topright", legend = names(reig), pch=18, col=col, bty="n")
+  } else {
+    #95% threshold
+    eig95 <- apply(reig,2,q95)
+    if (cum){
+      cumeig <- t(apply(reig,1,cumsum))
+      eig95 <- apply(cumeig,2,q95)
+    }
+    info <- plot_eig(mvar, leg=FALSE, cum=cum, 
+                     ylim=c(0, max(c(mvar$eig/sum(mvar$eig)*100, eig95))))
+    lines(info$barx, eig95, col=col, type="b", pch=18, xpd=NA)
+    points(info$barx, eig95, col=col, pch=18, xpd=NA)
+    signif <- info$perc>eig95
+    star <- ifelse(signif, "*", "")
+    text(x= info$barx, y= max(info$perc) + 1, star, xpd=NA, col=col)
+  }
 }
 
-# plot.randtest ---------------------------------------
+# plot_randtest ---------------------------------------
 #' Compare the eigen values with randomly created matrices.
 #'
 #' @param obs eigen vectors from ita on original dataset (from ita function)
@@ -263,16 +337,22 @@ plot.nrand <- function(mvar, reig, col="blue"){
 #' @param nclass number of bars in the histogram
 #' @param coeff default =1
 #' @param npc indicating which dimension to compare (default npc = 1)
+#' @param ... other argument for plot
 #'
 #' @return Plot comparing the distribution of eigen values from random matrices, with the observed value.
-#'
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
-#' @keywords 
 #' @examples
+#' # Load data
+#' data(baltic)
+#' # Run ita
+#' mvar <- ita(baltic, npc=2)
+#' #Eigen values with randomly generated data
+#' mrand <- ita.nrand(baltic, nrep = 50)
+#' # plot observed eigen value compared to null model 
+#' plot_randtest(mvar, mrand)
 #' @note inspired from ade4 r-package
 #' @export
 #'
-plot.randtest <- function (obs, distri, nclass = 10, coeff = 1, npc=1, ...) 
+plot_randtest <- function (obs, distri, nclass = 10, coeff = 1, npc=1, ...) 
 {
   if ("eig"%in%names(obs)){
     obs <- obs$eig[npc]/sum(obs$eig)*100
@@ -293,29 +373,3 @@ plot.randtest <- function (obs, distri, nclass = 10, coeff = 1, npc=1, ...)
   invisible()
 }
 
-# plot.eigrand ---------------------------------------
-#' Compare the eigen values with randomly created matrices.
-#'
-#' @param mvar eigen vectors from ita on original dataset (from ita function)
-#' @param eigrand eig results from randomly created matrices (from ita.nrand function)
-#' @param col colors for the significance interval
-#'
-#' @return Plot of eigen values with 95% confidence interval.
-#'
-#' @author Romain Frelat, \email{rom.frelat@gmail.com}
-#' @keywords 
-#' @examples
-#' @note inspired from ade4 r-package
-#' @export
-#'
-plot.eigrand <- function(mvar, eigrand, col=brewer.pal(length(R), "Dark2")){
-  info <- plot.eig(mvar, leg=FALSE)
-  for (i in 1:length(R)){
-    lines(info$barx, apply(R[[i]],2,q95), col=col[i], 
-          type="b", pch=18, xpd=NA)
-    signif <- info$perc>apply(R[[i]],2,q95)
-    star <- ifelse(signif, "*", "")
-    text(x= info$barx, y= max(info$perc) + i*0.5, star, xpd=NA, col=col[i])
-  }
-  legend("topright", legend = names(R), pch=18, col=col, bty="n")
-}

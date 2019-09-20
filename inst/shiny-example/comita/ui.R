@@ -44,10 +44,10 @@ shinyUI(fluidPage(
                                   "DFA (very long)"=2, 
                                   "DPCA (long)"=3,
                                   "MAFA"=4, 
-                                  "ICA"=5, 
                                   "TSFA"=7, 
                                   "FCA (very long)"=8, 
-                                  "LLE"=9)),
+                                  "LLE"=9,
+                                  "MDS"=11)),
        sliderInput("npc", h5("Number of PC"),
                    min = 2, max = 5, value = 2),
        checkboxInput('log', 'Log transform', FALSE)
@@ -61,11 +61,15 @@ shinyUI(fluidPage(
      ),
      conditionalPanel(
        'input.out === "Results" & input.met === "1"',
+       h5("Horn's parallel analysis"),
        checkboxInput('ran', 'Compare with random', FALSE)
      ), 
      conditionalPanel(
        'input.out === "Results" & input.met === "1" & input.ran',
-       checkboxInput('ar', 'Similar AR', FALSE),
+       selectInput("metrand", h5("Method:"),
+                   choices = list("Random" = "rand",
+                                  "Random + trend" = "trend",
+                                  "Phase structure" ="phase")),
        numericInput("nr", "Repetitions", 100)
      ),
      
@@ -76,11 +80,11 @@ shinyUI(fluidPage(
                           choices = list("PCA"=1,
                                          "DFA (very long)"=2, 
                                          "DPCA (long)"=3,
-                                         "MAFA"=4, 
-                                         "ICA"=5, 
+                                         "MAFA"=4,
                                          "TSFA"=7, 
                                          "FCA (very long)"=8, 
-                                         "LLE"=9),
+                                         "LLE"=9,
+                                         "MDS"=11),
                           selected = c(7)),
        hr(),
        selectInput("npc2", h5("Show PC:"),
@@ -92,8 +96,8 @@ shinyUI(fluidPage(
        ),
        conditionalPanel(
        'input.out === "Documentation" ',
-       HTML("<b>Details: </b> <br> <br> R package comita, v 0.1 <br> Last update : 24.05.2019"),
-       HTML("<br><br> If you have any question <br> or detect any bug, <br> please contact R. Frelat: <br> rfrelat(at)yahoo.com.")
+       HTML("<b>Details: </b> <br> <br> R package comita, v 0.1 <br> Last update : 16.09.2019"),
+       HTML("<br><br> If you have any question <br> or detect any bug, <br> please contact Romain Frelat: <br> rom.frelat /at\ gmail.com .")
        )
     ),
     # Show a plot of the generated distribution

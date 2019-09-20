@@ -23,6 +23,10 @@ characteristics of the dataset, including
 \description{
 Return a set of statistics on the original dataset
 }
+\examples{
+data(baltic)
+infoTS(baltic)
+}
 \seealso{
 \code{\link{ar1}}
 }

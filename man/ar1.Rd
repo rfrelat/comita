@@ -15,6 +15,10 @@ value of autocorrelation of lag 1
 \description{
 Compute first autocorrelation (AR1) of a time series
 }
+\examples{
+data(baltic)
+ar1(baltic$Cod)
+}
 \seealso{
 \code{\link{infoTS}}
 }

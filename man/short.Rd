@@ -20,3 +20,7 @@ shorten characters
 \description{
 Shorten strings taking the first character of words
 }
+\examples{
+data(baltic)
+short(names(baltic))
+}

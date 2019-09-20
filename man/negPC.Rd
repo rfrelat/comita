@@ -2,7 +2,8 @@
 % Please edit documentation in R/basic.R
 \name{negPC}
 \alias{negPC}
-\title{Homogenized the sign of PC trends to negative trends}
+\title{Homogenized the sign of PC trends to negative trends
+(internal function)}
 \usage{
 negPC(mvar)
 }
@@ -14,4 +15,5 @@ same object as input, but with scores multiplied by -1 if needed to get a negati
 }
 \description{
 Homogenized the sign of PC trends to negative trends
+(internal function)
 }

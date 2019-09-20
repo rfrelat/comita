@@ -13,7 +13,7 @@ ita.sfa(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} NULL - no scores of the variables on the new dimensions 
 \item \code{eig} NULL 
@@ -27,9 +27,6 @@ Run Slow Feature Analysis
 }
 \note{
 Use function from a package.
-}
-\examples{
-
 }
 \references{
 Wiskott L, Sejnowski TJ (2002) Slow Feature Analysis: Unsupervised Learning of Invariances. Neural Comput 14:715–770

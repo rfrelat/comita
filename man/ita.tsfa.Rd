@@ -13,7 +13,7 @@ ita.tsfa(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values
@@ -27,9 +27,6 @@ Run a Time-series Factor Analysis
 }
 \note{
 Use function estTSF.ML from tsfa package.
-}
-\examples{
-
 }
 \references{
 Gilbert PD, & Meijer E (2005) Time series factor analysis with an application to measuring money. University of Groningen, Research School SOM Research Report 05F10.

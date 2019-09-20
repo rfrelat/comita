@@ -2,7 +2,8 @@
 % Please edit documentation in R/basic.R
 \name{getpvar}
 \alias{getpvar}
-\title{Function to know the percentage of variance explained}
+\title{Function to know the percentage of variance explained
+(internal function)}
 \usage{
 getpvar(ts, co, dat, npc)
 }
@@ -20,6 +21,7 @@ the cumulated percentage of variance explained by the successive new dimensions
 }
 \description{
 Function to know the percentage of variance explained
+(internal function)
 }
 \note{
 inspired from https://ro-che.info/articles/2017-12-11-pca-explained-variance

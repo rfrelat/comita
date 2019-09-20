@@ -13,7 +13,7 @@ ita.pcaV(dat, npc)
 }
 \value{
 Result of multivariate analysis with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values
@@ -24,7 +24,4 @@ Result of multivariate analysis with
 }
 \description{
 Internal function to run a Principal Component analysis followed by Varimax
-}
-\examples{
-
 }

@@ -4,14 +4,12 @@
 \alias{createRand}
 \title{Create a random dataset with similar characteristics than original data}
 \usage{
-createRand(dat, ar = TRUE, tr = FALSE)
+createRand(dat, metrand = c("phase", "rand", "trend"))
 }
 \arguments{
 \item{dat}{matrix of time series (time in rows, variables in columns)}
 
-\item{ar}{whether to keep the autocorrelation structure (default = TRUE)}
-
-\item{tr}{whether to add a trend similar to the original one (default =FALSE)}
+\item{metrand}{define the method to create random dataset (either "phase", "rand", or "trend")}
 }
 \value{
 a randomly generated matrix of similar size than \code{dat}
@@ -19,6 +17,18 @@ a randomly generated matrix of similar size than \code{dat}
 \description{
 Create a random dataset with similar characteristics than original data
 }
+\details{
+Variable \code{metrand} can be "phase", "rand" or "trend": 
+\itemize{
+\item \code{phase} keep similar phase structure in the dataset
+\item \code{rand} randomly generated data with similar mean and sd
+\item \code{trend} randomly generated data with similar trend
+}
+}
+\examples{
+data(baltic)
+createRand(baltic, metrand="phase")
+}
 \seealso{
-\code{\link{ita.rand}}, \code{\link{ita.nrand}}
+\code{\link{ita.rand}}, \code{\link{ita.nrand}}, \code{\link{singleRand}}
 }

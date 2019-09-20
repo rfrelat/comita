@@ -13,7 +13,7 @@ ita.mafa(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values

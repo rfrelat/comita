@@ -15,3 +15,7 @@ value of the linear trend
 \description{
 Compute the linear trend of a time series
 }
+\examples{
+data(baltic)
+trend(baltic$Cod)
+}

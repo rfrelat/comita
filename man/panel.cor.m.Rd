@@ -8,6 +8,8 @@ panel.cor.m(x, y, digits = 2)
 }
 \arguments{
 \item{x, y}{x and y}
+
+\item{digits}{precision}
 }
 \value{
 Pearson correlation

@@ -1,15 +1,29 @@
 Package: comita
 Title: Comparative tools for Ecosystem Integrative Trend Analysis
-Version: 0.0.0.9000
+Version: 0.0.1.0000
 Authors@R: 
     person(given = "Romain",
            family = "Frelat",
            role = c("aut", "cre"),
            email = "rom.frelat@gmail.com",
-           comment = structure("YOUR-ORCID-ID", .Names = "ORCID"))
+           comment = structure("0000-0002-8631-4398", .Names = "ORCID"))
 Description: Integrated trend analyses (ITA) are commonly applied to summarise changes that have occurred in recent decades in ecosystems. Currently there are multiple methods used for ITA, raising question on which is the best method to use for ITA. The aim of this application is to provide a tool to easily compare different ITA methods, and test the effect of data pre-processing and variables selection on the final results. Hopefully, this package will raise awareness of ecologists to different dimension reduction techniques, as well as provide reason and confidence on the choice of ITA methods according to the characteristics of their dataset.
-Imports: ade4, shiny, ForeCA,MARSS,lle,tsfa,fractal,RColorBrewer,vegan,freqdom,fastICA
-Suggests: 
+Depends:
+  stats,
+  MARSS,
+  graphics
+Imports: 
+  ade4, 
+  shiny,
+  ForeCA,
+  lle,
+  tsfa,
+  fractal,
+  RColorBrewer,
+  vegan,
+  freqdom,
+  fastICA,
+  grDevices
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

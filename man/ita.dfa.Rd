@@ -13,7 +13,7 @@ ita.dfa(dat, npc)
 }
 \value{
 Result of multivariate analysis with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values
@@ -28,9 +28,6 @@ Run a Dynamic Factor Analysis with diagonal and unequal matrix model
 \note{
 R code inspired from https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html
 Holmes, E. E., M. D. Scheuerell, and E. J. Ward. Applied time series analysis for fisheries and environmental data. NOAA Fisheries, Northwest Fisheries Science Center, 2725 Montlake Blvd E., Seattle, WA 98112.
-}
-\examples{
-
 }
 \references{
 Zuur AF, Fryer RJ, Jolliffe IT, Dekker R, Beukema JJ (2003) Estimating common trends in multivariate time series using dynamic factor analysis. Environmetrics 14:665–685

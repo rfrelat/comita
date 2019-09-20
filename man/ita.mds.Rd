@@ -13,7 +13,7 @@ ita.mds(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} NULL - no scores of the variables on the new dimensions 
 \item \code{eig} NULL 
@@ -24,7 +24,4 @@ Output of ITA with
 }
 \description{
 Run Multidimensional scaling
-}
-\examples{
-
 }

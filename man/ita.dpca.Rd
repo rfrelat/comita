@@ -13,7 +13,7 @@ ita.dpca(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values
@@ -27,9 +27,7 @@ Run a Dynamic Principal Component Analysis
 }
 \note{
 lag set to 1, which correspond to AR1 processes
-}
-\examples{
-
+Function based on dpca from freqdom package
 }
 \references{
 Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196

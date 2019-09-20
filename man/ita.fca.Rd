@@ -13,7 +13,7 @@ ita.fca(dat, npc)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} NULL - no scores of the variables on the new dimensions 
 \item \code{eig} NULL 
@@ -28,9 +28,6 @@ Run Forecastable Component Analysis
 \note{
 Use function foreca from the ForeCA package.
 Limited to matrices with more time steps than variables
-}
-\examples{
-
 }
 \references{
 Goerg GM (2013) Forecastable Component Analysis. In: Proceedings of the 30th International Conference on Machine Learning.p 64–72

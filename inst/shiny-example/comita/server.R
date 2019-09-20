@@ -72,7 +72,7 @@ shinyServer(function(input, output, session) {
     #1. Heatmap
     if (!is.null(mvar$co)){ #!input$met%in%c(99)
       par(mar=c(2,4,0,0.1))
-      plot.heatmap(mvar, col, shortname=lab)
+      plot_heatmap(mvar, col, shortname=lab)
       mtext("Heatmap", side = 3, line = 0.5, adj = 0)
     } else {
       plot.new()
@@ -80,21 +80,24 @@ shinyServer(function(input, output, session) {
     
     #2. PC time series
     par(mar=c(0.5,4,1,0.1), xaxs="i", yaxs="i")
-    plot.timeseries(mvar)
+    plot_timeseries(mvar)
 
     #3. Eigen values
     if (!is.null(mvar$eig)){#!input$met%in%c(99)
       par(mar=c(4,2,2,0.1))
-      barx <- plot.eig(mvar)
+      
       #compare to random
       if(input$ran & input$met==1){
         randeig <- ita.nrand(tab, nrep = input$nr, met = input$met, sca = TRUE,
-                             logt = input$log, ar = input$ar, tr = FALSE, npc = input$npc)
-        lines(barx$barx, apply(randeig,2,q95), col="red", 
-              type="b", pch=18, xpd=NA)
-        signif <- barx$perc>apply(randeig,2,q95)
-        star <- ifelse(signif, "*", "")
-        text(x= barx$barx, y= barx$perc + 1, star, xpd=NA, col="red")
+                             logt = input$log, metrand = input$metrand, npc = input$npc)
+        plot_nrand(mvar, randeig)
+        # lines(barx$barx, apply(randeig,2,q95), col="red", 
+        #       type="b", pch=18, xpd=NA)
+        # signif <- barx$perc>apply(randeig,2,q95)
+        # star <- ifelse(signif, "*", "")
+        # text(x= barx$barx, y= barx$perc + 1, star, xpd=NA, col="red")
+      } else {
+        barx <- plot_eig(mvar)
       }
     } else (
       plot.new()
@@ -103,7 +106,7 @@ shinyServer(function(input, output, session) {
     #4. Corcircle or dotchart
     if (!is.null(mvar$co) & input$npc>1){
       par(mar=c(4,2,2,0.1))
-      plot.var(mvar)
+      plot_var(mvar)
     } else {
       plot.new()
     }
@@ -124,18 +127,18 @@ shinyServer(function(input, output, session) {
     # }
     met <- unique(c(as.numeric(input$met), as.numeric(input$multimet)))
     mvar <- multita(tab, npc = input$npc, met = met,
-             sca = TRUE, logt = input$log, detrend = FALSE)
+             sca = TRUE, logt = input$log)
     
     ##Visualization
     layout(matrix(1:4, ncol=2, byrow = TRUE), width=c(4,1))
     #col <- c("black", brewer.pal(9, "Set1")[met[-1]])
-    col <- c("black", rainbow(9)[met[-1]])#
+    col <- c("black", rainbow(11)[met[-1]])#
     #1.  PC time series
-    leg1 <- plot.compts(tab, mvar, col, showleg = FALSE, pc=npc2)
+    leg1 <- plot_compts(tab, mvar, col, showleg = FALSE, pc=npc2)
     plot.new()
     legend("center", legend = leg1$leg, lty = 1, col=leg1$col, xpd=NA, bty="n")
     #2. Variables score
-    leg2 <- plot.compvar(tab, mvar, col = col, showleg = FALSE, shortname = lab, pc=npc2)
+    leg2 <- plot_compvar(tab, mvar, col = col, showleg = FALSE, shortname = lab, pc=npc2)
     plot.new()
     legend("center", legend = leg2$leg, pch = 16, col=leg2$col, xpd=NA, bty="n")
   })

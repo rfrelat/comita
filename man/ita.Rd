@@ -4,7 +4,7 @@
 \alias{ita}
 \title{Run Integrated Trend Analysis}
 \usage{
-ita(dat, npc, met = 1, sca = TRUE, logt = FALSE, detrend = FALSE)
+ita(dat, npc, met = 1, sca = TRUE, logt = FALSE)
 }
 \arguments{
 \item{dat}{matrix with}
@@ -19,7 +19,7 @@ ita(dat, npc, met = 1, sca = TRUE, logt = FALSE, detrend = FALSE)
 }
 \value{
 Output of ITA with 
-\describe{
+\itemize{
 \item \code{ts} scores of the time series on the new dimensions 
 \item \code{co} scores of the variables on the new dimensions (if any)
 \item \code{eig} eigen values (for PCA associated methods)
@@ -33,7 +33,7 @@ Run Integrated Trend Analysis
 }
 \details{
 Variable \code{met} are either string or number indicating: 
-\describe{
+\itemize{
 \item \code{ita.pca} scores of the time series on the new dimensions 
 \item \code{ita.pcaV} scores of the variables on the new dimensions (if any)
 \item \code{ita.} eigen values (for PCA associated methods)
@@ -43,5 +43,15 @@ Variable \code{met} are either string or number indicating:
 }
 }
 \examples{
+# Load data
+data(baltic)
+#  Run ita
+mvar <- ita(baltic, npc=2)
+# Plot eigen values
+plot_eig(mvar)
+# Plot scores of years
+plot_timeseries(mvar)
+# Plot scores of variables
+plot_var(mvar)
 
 }
