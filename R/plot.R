@@ -148,6 +148,9 @@ plot_var <- function(mvar){
 #' @param col pallette of colors for the different methods of Integrated Trend Analysis
 #' @param pc which dimension to plot (default pc=1)
 #' @param showleg whether to plot a legend (default showleg = TRUE)
+#' @param mar4 additionnal margin on the right side of the plot
+#' @param pccor compare best correlated PC, or fixed (default = TRUE)
+#' @param ... additional arguments to plot()
 #' @return The pairwize correlation of time series score compared with the first ITA of multimvar
 #' @keywords time series
 #' @examples
@@ -159,15 +162,45 @@ plot_var <- function(mvar){
 #' plot_compts(baltic, multi)
 #' @export
 #'
-plot_compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), pc=1, showleg=TRUE){
+plot_compts <- function(dat, multimvar, col=NULL, 
+                        pc=1, showleg=TRUE, mar4=5,
+                        pccor=TRUE,...){
+  if(length(multimvar)==1){
+    stop("use plot_timeseries() for single multivariate analysis")
+  }
   yr <- as.numeric(row.names(dat))
+  if(is.null(col)){
+    if (length(multimvar)>8){
+      getPalette<-grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))
+      col<-getPalette(length(multimvar))
+    } else {
+      col<-RColorBrewer::brewer.pal(length(multimvar), "Set2")
+    }
+  }
+  if (showleg){
+    op <- par(mar=par()$mar+c(0,0,0,mar4))
+  }
+  if (pccor){
+    npc <- pc
+    for (i in 2:length(multimvar)){
+      corI <- cor(cbind(multimvar[[1]]$ts[,pc], multimvar[[i]]$ts))
+      pcI <- which.max(abs(corI[-1,1]))
+      npc <- c(npc, pcI)
+      if(corI[-1,1][pcI]<0){
+        multimvar[[i]]$ts[,pcI] <- -multimvar[[i]]$ts[,pcI]
+      }
+    }
+  } else {
+    npc <- rep(pc, length(multimvar))
+  }
+  
   #maxabs <- unlist(lapply(multimvar, function(x) max(abs(x$ts[,1]))))
   #limY <- c(-maxabs, maxabs)
-  plot(yr, scale(multimvar[[1]]$ts[,pc]), type="l", ylim=c(-2.5, 2.5), col=col[1],
-       ylab="PC score", xlab="time")
+  plot(yr, scale(multimvar[[1]]$ts[,npc[1]]), type="l", ylim=c(-2.5, 2.5), col=col[1],
+       ylab="PC score", xlab="time", ...)
   if (length(multimvar)>1){
     for (i in 2:length(multimvar)){
-      lines(yr, scale(multimvar[[i]]$ts[,pc]), col=col[i])
+      lines(yr, scale(multimvar[[i]]$ts[,npc[i]]), col=col[i])
     } 
   }
   
@@ -175,15 +208,15 @@ plot_compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"
   abline(h=0, col="grey70", lty=2)
   
   #legend
-  leg <- c(names(multimvar)[1])
+  leg <- c(paste0(names(multimvar)[1], npc[1]))
   coleg <-  col[1]
   alpha <- c(0, 0.001, 0.01, 0.05, 0.1, 1)
   stars <- c("***", "**", "*", ".", " ")
   corts <- c()
   if (length(multimvar)>1){
     for (i in 2:length(multimvar)){
-      cor1i <- cor.test(multimvar[[1]]$ts[,pc], multimvar[[i]]$ts[,pc])
-      leg <- c(leg, paste0(names(multimvar)[i], ": ", round(cor1i$estimate,2), symnum(cor1i$p.value, alpha, stars)))
+      cor1i <- cor.test(multimvar[[1]]$ts[,npc[1]], multimvar[[i]]$ts[,npc[i]])
+      leg <- c(leg, paste0(names(multimvar)[i], npc[i], ": ", round(cor1i$estimate,2), symnum(cor1i$p.value, alpha, stars)))
       corts <- c(corts, cor1i$estimate, cor1i$p.value)
       coleg <-  c(coleg, col[i])
     }
@@ -193,6 +226,7 @@ plot_compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"
            lty = 1, col=col, cex=0.8, legend = leg, xpd=NA)
     names(corts) <- paste0(rep(c("cor", "pval"), length(multimvar)-1),
                            "_", rep(names(multimvar)[-1], each=2))
+    par(op)
     return(corts)
   }
   else {
@@ -220,10 +254,19 @@ plot_compts <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"
 #' plot_compvar(baltic, multi)
 #' @export
 #'
-plot_compvar <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2"), 
+plot_compvar <- function(dat, multimvar, col=NULL, 
                          pc=1, showleg=TRUE, shortname=short(colnames(dat))){
   lab <- shortname
   odPC <- order(multimvar[[1]]$co[,pc])
+  
+  if(is.null(col)){
+    if (length(multimvar)>8){
+      getPalette<-grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))
+      col<-getPalette(length(multimvar))
+    } else {
+      col<-RColorBrewer::brewer.pal(length(multimvar), "Set2")
+    }
+  }
   
   if (showleg){
     layout(matrix(1:2, ncol = 2), widths = c(3,1))
@@ -244,7 +287,7 @@ plot_compvar <- function(dat, multimvar, col=brewer.pal(length(multimvar), "Set2
   leg <- c(names(multimvar)[1])
   alpha <- c(0, 0.001, 0.01, 0.05, 0.1, 1)
   stars <- c("***", "**", "*", ".", " ")
-  corbio <- paste0(names(multimvar)[1])
+  corbio <- c()
   coleg <-  col[1]
   if (length(multimvar)>1){
     for (i in 2:length(multimvar)){
@@ -367,7 +410,7 @@ plot_randtest <- function (obs, distri, nclass = 10, coeff = 1, npc=1, ...)
   xlim0 <- range(r0) + c(-w0, w0)
   h0 <- hist(distri, plot = FALSE, nclass = nclass)
   y0 <- max(h0$counts)
-  plot(h0, xlim = xlim0, col = grey(0.8), ...)
+  plot(h0, xlim = xlim0, col = "grey80", ...)
   lines(c(obs, obs), c(y0/2, 0))
   points(obs, y0/2, pch = 18, cex = 2)
   invisible()

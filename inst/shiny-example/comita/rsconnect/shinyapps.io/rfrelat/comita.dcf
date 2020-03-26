@@ -5,9 +5,8 @@ account: rfrelat
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 947413
-bundleId: 2106523
+bundleId: 2428735
 url: https://rfrelat.shinyapps.io/comita/
-when: 1558708183.60637
+when: 1568964758.79407
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: README.md

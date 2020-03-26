@@ -5,8 +5,7 @@
 \title{Visualy compare the scores of the time series on reduced dimensions
 from different methods of Integrated Trend Analysis}
 \usage{
-plot_compts(dat, multimvar, col = brewer.pal(length(multimvar), "Set2"),
-  pc = 1, showleg = TRUE)
+plot_compts(dat, multimvar, col = NULL, pc = 1, showleg = TRUE, ...)
 }
 \arguments{
 \item{dat}{original dataset}
@@ -18,6 +17,8 @@ plot_compts(dat, multimvar, col = brewer.pal(length(multimvar), "Set2"),
 \item{pc}{which dimension to plot (default pc=1)}
 
 \item{showleg}{whether to plot a legend (default showleg = TRUE)}
+
+\item{...}{additional arguments to plot()}
 }
 \value{
 The pairwize correlation of time series score compared with the first ITA of multimvar

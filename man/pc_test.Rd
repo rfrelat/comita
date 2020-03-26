@@ -4,8 +4,7 @@
 \alias{pc_test}
 \title{Compute p-values for principal component eigen values}
 \usage{
-pc_test(dat, nrep = 100, metrand = "rand", sca = TRUE,
-  logt = FALSE)
+pc_test(dat, nrep = 100, metrand = "rand", sca = TRUE, logt = FALSE)
 }
 \arguments{
 \item{dat}{matrix with}

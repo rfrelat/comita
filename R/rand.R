@@ -93,7 +93,7 @@ singleRand <- function(ts, metrand=c("rand", "phase", "trend")){
 #' @seealso \code{\link{createRand}}, \code{\link{ita.nrand}}
 #' @export
 #'
-ita.rand <- function(dat, npc=2, met=1, sca=TRUE, logt=FALSE, metrand="phase"){
+ita.rand <- function(dat, npc=2, met="pca", sca=TRUE, logt=FALSE, metrand="phase"){
   rand <- createRand(dat, metrand=metrand)
   if (logt){
     rand <- log(rand+ifelse(min(rand)<=0, abs(min(rand))+1, 0))
@@ -129,7 +129,7 @@ ita.rand <- function(dat, npc=2, met=1, sca=TRUE, logt=FALSE, metrand="phase"){
 #' plot_nrand(mvar, mrand)
 #' @export
 #'
-ita.nrand <- function(dat, npc=2, met=1, sca=TRUE, logt=FALSE, metrand="phase", nrep=10){
+ita.nrand <- function(dat, npc=2, met="pca", sca=TRUE, logt=FALSE, metrand="phase", nrep=10){
   eigmat <- c()
   for (i in 1:nrep){
     eigmat <- rbind(eigmat, ita.rand(dat, npc=npc, met=met, sca=sca, logt=logt, metrand=metrand))

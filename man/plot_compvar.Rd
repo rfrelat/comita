@@ -5,8 +5,14 @@
 \title{Visually compare the scores of the variables on reduced dimensions
 from different methods of Integrated Trend Analysis}
 \usage{
-plot_compvar(dat, multimvar, col = brewer.pal(length(multimvar), "Set2"),
-  pc = 1, showleg = TRUE, shortname = short(colnames(dat)))
+plot_compvar(
+  dat,
+  multimvar,
+  col = NULL,
+  pc = 1,
+  showleg = TRUE,
+  shortname = short(colnames(dat))
+)
 }
 \arguments{
 \item{dat}{original dataset}

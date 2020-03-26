@@ -2,7 +2,7 @@
 % Please edit documentation in R/ita.R
 \name{ita.pcaV}
 \alias{ita.pcaV}
-\title{Internal function to run a Principal Component analysis followed by Varimax}
+\title{Run a Principal Component analysis followed by Varimax}
 \usage{
 ita.pcaV(dat, npc)
 }
@@ -23,5 +23,5 @@ Result of multivariate analysis with
 }
 }
 \description{
-Internal function to run a Principal Component analysis followed by Varimax
+Run a Principal Component analysis followed by Varimax
 }

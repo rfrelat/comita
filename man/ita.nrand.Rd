@@ -4,8 +4,15 @@
 \alias{ita.nrand}
 \title{Extension of ita.rand to generate multiple datasets}
 \usage{
-ita.nrand(dat, npc = 2, met = 1, sca = TRUE, logt = FALSE,
-  metrand = "phase", nrep = 10)
+ita.nrand(
+  dat,
+  npc = 2,
+  met = "pca",
+  sca = TRUE,
+  logt = FALSE,
+  metrand = "phase",
+  nrep = 10
+)
 }
 \arguments{
 \item{dat}{matrix of time series (time in rows, variables in columns)}

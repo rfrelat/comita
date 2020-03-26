@@ -4,7 +4,7 @@
 \alias{ita}
 \title{Run Integrated Trend Analysis}
 \usage{
-ita(dat, npc, met = 1, sca = TRUE, logt = FALSE)
+ita(dat, npc, met = "pca", sca = TRUE, logt = FALSE, ...)
 }
 \arguments{
 \item{dat}{matrix with}

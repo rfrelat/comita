@@ -4,8 +4,14 @@
 \alias{ita.rand}
 \title{Run Integrated Trend Analysis on randomly generated dataset}
 \usage{
-ita.rand(dat, npc = 2, met = 1, sca = TRUE, logt = FALSE,
-  metrand = "phase")
+ita.rand(
+  dat,
+  npc = 2,
+  met = "pca",
+  sca = TRUE,
+  logt = FALSE,
+  metrand = "phase"
+)
 }
 \arguments{
 \item{dat}{matrix of time series (time in rows, variables in columns)}

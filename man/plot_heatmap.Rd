@@ -4,9 +4,12 @@
 \alias{plot_heatmap}
 \title{Create a heatmap}
 \usage{
-plot_heatmap(mvar, col = c("springgreen4", "chartreuse3", "yellow",
-  "darkgoldenrod1", "red"), n = 1,
-  shortname = short(colnames(mvar$dat)))
+plot_heatmap(
+  mvar,
+  col = c("springgreen4", "chartreuse3", "yellow", "darkgoldenrod1", "red"),
+  n = 1,
+  shortname = short(colnames(mvar$dat))
+)
 }
 \arguments{
 \item{mvar}{results of multivariate analysis (from ita function)}

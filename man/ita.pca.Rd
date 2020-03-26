@@ -2,7 +2,7 @@
 % Please edit documentation in R/ita.R
 \name{ita.pca}
 \alias{ita.pca}
-\title{Internal function to run a Principal Component analysis}
+\title{Run a Principal Component analysis}
 \usage{
 ita.pca(dat, npc)
 }
@@ -10,6 +10,8 @@ ita.pca(dat, npc)
 \item{dat}{matrix with}
 
 \item{npc}{number of selected principal components}
+
+\item{...}{optional arguments passed to multivariate function}
 }
 \value{
 Result of multivariate analysis with 
@@ -23,5 +25,5 @@ Result of multivariate analysis with
 }
 }
 \description{
-Internal function to run a Principal Component analysis
+Run a Principal Component analysis
 }

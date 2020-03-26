@@ -1,9 +1,10 @@
 # Define the multiple methods to compute Integrative Trend Analysis
 # ita.pca ---------------------------------------
-#' Internal function to run a Principal Component analysis
-#'
+#' Run a Principal Component analysis
+#' 
 #' @param dat matrix with 
 #' @param npc number of selected principal components
+#' @param ... optional arguments passed to multivariate function
 #' @return Result of multivariate analysis with 
 #' \itemize{
 #' \item \code{ts} scores of the time on the principal component
@@ -25,7 +26,7 @@ ita.pca<- function(dat, npc){
 }
 
 # ita.pcaV ---------------------------------------
-#' Internal function to run a Principal Component analysis followed by Varimax
+#' Run a Principal Component analysis followed by Varimax
 #'
 #' @param dat matrix with 
 #' @param npc number of selected principal components
@@ -42,7 +43,7 @@ ita.pca<- function(dat, npc){
 #'
 ita.pcaV<- function(dat, npc){
   mvar <- ade4::dudi.pca(dat, nf=npc, scannf = FALSE, center = TRUE, scale = TRUE)
-  rawLoadings     <- as.matrix(mvar$co[,1:npc]) #%*% diag(sqrt(mvar$eig), npc, npc)
+  rawLoadings     <- as.matrix(mvar$co[,1:npc])
   vari <- stats::varimax(rawLoadings)
   ts <- scale(mvar$li[,1:npc]) %*% vari$rotmat
   co <- unclass(vari$loadings)
@@ -66,9 +67,11 @@ ita.pcaV<- function(dat, npc){
 #' \item \code{npc} number of selected principal component
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
-#' @note R code inspired from https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html
+#' @note Use MARSS pacakge, the R code is inspired from https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html
 #' Holmes, E. E., M. D. Scheuerell, and E. J. Ward. Applied time series analysis for fisheries and environmental data. NOAA Fisheries, Northwest Fisheries Science Center, 2725 Montlake Blvd E., Seattle, WA 98112.
+#' 
 #' @references Zuur AF, Fryer RJ, Jolliffe IT, Dekker R, Beukema JJ (2003) Estimating common trends in multivariate time series using dynamic factor analysis. Environmetrics 14:665–685
+#' @export
 #' 
 ita.dfa <- function(dat, npc){
   #parameters 
@@ -102,16 +105,22 @@ ita.dfa <- function(dat, npc){
   
   ## fit MARSS
   ret <- as.matrix(t(dat))
-  mvar <- MARSS::MARSS(y=ret, model=mod_list, inits=init_list, control=con_list)
+  mvar <- MARSS::MARSS(y=ret, model=mod_list, inits=init_list, 
+                       control=con_list, silent=TRUE)
   
   ## get the estimated ZZ
   Z_est <- coef(mvar, type="matrix")$Z
   ## get the inverse of the rotation matrix
-  H_inv <- stats::varimax(Z_est)$rotmat
-  ## rotate factor loadings
-  Z_rot = Z_est %*% H_inv   
-  ## rotate processes
-  proc_rot = solve(H_inv) %*% mvar$states
+  if (ncol(Z_est) >1){
+    H_inv <- stats::varimax(Z_est)$rotmat
+    ## rotate factor loadings
+    Z_rot = Z_est %*% H_inv
+    ## rotate processes
+    proc_rot = solve(H_inv) %*% mvar$states
+  } else {
+    Z_rot <- Z_est
+    proc_rot = mvar$states
+  }
   
   ts=t(proc_rot)
   co=Z_rot
@@ -127,6 +136,7 @@ ita.dfa <- function(dat, npc){
 #' Run a Dynamic Principal Component Analysis
 #' @param dat matrix with 
 #' @param npc number of processes
+#' @param q window size for the kernel estimator (default q=1)
 #' @return Output of ITA with 
 #' \itemize{
 #' \item \code{ts} scores of the time on the principal component
@@ -137,14 +147,14 @@ ita.dfa <- function(dat, npc){
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
 #' @note lag set to 1, which correspond to AR1 processes
-#' Function based on dpca from freqdom package
+#' Function based on dpca() from freqdom package
 #' @references 
 #' Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
 #' Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
 #' @export
 #'
-ita.dpca<-function(dat, npc){
-  mvar <- freqdom::dpca(dat, q=1, Ndpc = npc)
+ita.dpca<-function(dat, npc, q=1){
+  mvar <- freqdom::dpca(dat, q=q, Ndpc = npc)
   ts <- mvar$scores
   co <- apply(mvar$filters$operators, c(2,1), mean)
   #or lag0: mvar$filters$operators[,,2]
@@ -156,6 +166,7 @@ ita.dpca<-function(dat, npc){
 
 #ita.mafa ---------------------------------------
 #' Run a Min/Max Autocorrelation Factors Analysis (MAFA)
+#' 
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
@@ -193,6 +204,7 @@ ita.mafa<-function(dat, npc){
 
 #ita.tsfa ---------------------------------------
 #' Run a Time-series Factor Analysis
+#' 
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
@@ -207,7 +219,8 @@ ita.mafa<-function(dat, npc){
 #' @note Use function estTSF.ML from tsfa package.
 #' @references 
 #' Gilbert PD, & Meijer E (2005) Time series factor analysis with an application to measuring money. University of Groningen, Research School SOM Research Report 05F10.
-#'
+#' @export
+#' 
 ita.tsfa<-function(dat, npc){
   if(ncol(dat)>nrow(dat)){
     warning("higher number of variables than number of years")
@@ -223,6 +236,7 @@ ita.tsfa<-function(dat, npc){
 
 #ita.mds ----------------------------------------
 #' Run Multidimensional scaling
+#' 
 #' @param dat matrix with 
 #' @param npc number of processes
 #' @return Output of ITA with 
@@ -234,10 +248,15 @@ ita.tsfa<-function(dat, npc){
 #' \item \code{npc} number of selected principal component
 #' \item \code{mita} method used for integrated trend analysis 
 #' }
+#' @note lag set to 1, which correspond to AR1 processes
+#' Function based on dpca from freqdom package
+#' @references 
+#' Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
+#' Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
 #' @export
 #'
 ita.mds <- function(dat, npc){
-  mvar<- stats::cmdscale(stats::dist(dat), k=2, eig=TRUE)
+  mvar<- stats::cmdscale(stats::dist(dat), k=npc, eig=TRUE)
   co <- crossprod(as.matrix(dat), as.matrix(mvar$points))
   #co <- wascores(mvar$points, dat) #from vegan package
   pvar <- getpvar(mvar$points, co, dat, npc) #compute variance explained
@@ -245,8 +264,39 @@ ita.mds <- function(dat, npc){
               "pvar"=pvar,"dat"=dat, "npc"=npc, "mita"="MDS")
 }
 
+#ita.nmds ----------------------------------------
+#' Run Nonmetric Multidimensional scaling
+#' 
+#' @param dat matrix with 
+#' @param npc number of processes
+#' @return Output of ITA with 
+#' \itemize{
+#' \item \code{ts} scores of the time series on the new dimensions 
+#' \item \code{co} NULL - no scores of the variables on the new dimensions 
+#' \item \code{eig} NULL 
+#' \item \code{dat} original dataset
+#' \item \code{npc} number of selected principal component
+#' \item \code{mita} method used for integrated trend analysis 
+#' }
+#' @note Use MASS::isoMDS
+#' Function based on dpca from freqdom package
+#' @references 
+#' Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
+#' Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
+#' @export
+#'
+ita.nmds <- function(dat, npc){
+  ddat <- dist(dat, method = "euclidean")
+  mvar <- MASS::isoMDS(ddat, k = npc, trace=FALSE)
+  co <- crossprod(as.matrix(dat), as.matrix(mvar$points))
+  pvar <- getpvar(mvar$points, co, dat, npc)
+  res <- list("ts"=mvar$points, "co"=co, "eig"= NULL, 
+              "pvar"=pvar,"dat"=dat, "npc"=npc, "mita"="NMDS")
+}
+
 #ita.lle ----------------------------------------
 #' Run Local Linear Embedding
+#' 
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
@@ -279,6 +329,7 @@ ita.lle<-function(dat, npc){
 
 #ita.ica ----------------------------------------
 #' Run Independent Component Analysis
+#' 
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
@@ -311,6 +362,7 @@ ita.ica<- function(dat, npc){
 
 #ita.sfa ----------------------------------------
 #' Run Slow Feature Analysis
+#' 
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
@@ -342,6 +394,7 @@ ita.sfa<- function(dat, npc){
 
 #ita.fca ----------------------------------------
 #' Run Forecastable Component Analysis
+#' 
 #' @param dat matrix with 
 #' @param npc number of new dimensions
 #' @return Output of ITA with 
@@ -362,8 +415,8 @@ ita.sfa<- function(dat, npc){
 ita.fca<- function(dat, npc){
   if(ncol(dat)>nrow(dat)){
     warning("ForeCA can only be calculated with matrices with more time steps than variables.")
-    return(list("ts"=NULL, "co"=NULL, "eig"= NULL, 
-                "pvar"=NULL, "dat"=dat, "npc"=npc, "mita"="FCA"))
+    res <- list("ts"=NULL, "co"=NULL, "eig"= NULL, 
+                "pvar"=NULL, "dat"=dat, "npc"=npc, "mita"="FCA")
   } else {
     ret <- ts(dat) #no diff here, ok?
     mvar <- ForeCA::foreca(ret, n.comp = ncol(dat)-1)#, spectrum.control = list(method = "wosa"))
@@ -372,10 +425,75 @@ ita.fca<- function(dat, npc){
     pvar <- getpvar(ts, co, dat, npc)
     res <- list("ts"=ts, "co"=co, "eig"= mvar$sdev**2, 
                 "pvar"=pvar,"dat"=dat, "npc"=npc, "mita"="FCA")
-    return(res)
   }
+  return(res)
 }
 
+
+#ita.tsne ----------------------------------------
+#' Run t-distributed Stochastic Neighbor Embedding
+#' 
+#' @param dat matrix with 
+#' @param npc number of new dimensions
+#' @param p perplexity parameter (not bigger than 3 * perplexity < nrow(X) - 1)
+#' @return Output of ITA with 
+#' \itemize{
+#' \item \code{ts} scores of the time series on the new dimensions 
+#' \item \code{co} NULL - no scores of the variables on the new dimensions 
+#' \item \code{eig} NULL 
+#' \item \code{dat} original dataset
+#' \item \code{npc} number of new dimensions
+#' \item \code{mita} method used for integrated trend analysis 
+#' }
+#' @note Use function Rtsne from the Rtsne package.
+#' @references 
+#' Maaten, L. Van Der, 2014. Accelerating t-SNE using Tree-Based Algorithms. Journal of Machine Learning Research, 15, p.3221-3245.
+#' van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing High-Dimensional Data Using t-SNE. Journal of Machine Learning Research, 9, pp.2579-2605.
+#' @export
+#'
+ita.tsne<-function(dat, npc, p=2){
+  mvar <- Rtsne::Rtsne(dat, dims = npc, 
+                       perplexity = 2, verbose = FALSE, max_iter = 500)
+  ts <- mvar$Y
+  co <- as.matrix(crossprod(as.matrix(dat), as.matrix(ts)))
+  eig <- NA
+  pvar <- getpvar(ts, co, dat, npc)
+  res <- list(ts = ts, co = co, eig = eig, pvar = pvar, dat = dat, 
+              npc = npc, mita = "TSNE")
+}
+
+#ita.isomap ----------------------------------------
+#' Run Isometric Feature Mapping Ordination
+#' 
+#' @param dat matrix with 
+#' @param npc number of processes
+#' @param k Number of shortest dissimilarities retained for a point (default k=3)
+#' @return Output of ITA with 
+#' \itemize{
+#' \item \code{ts} scores of the time series on the new dimensions 
+#' \item \code{co} NULL - no scores of the variables on the new dimensions 
+#' \item \code{eig} NULL 
+#' \item \code{dat} original dataset
+#' \item \code{npc} number of selected principal component
+#' \item \code{mita} method used for integrated trend analysis 
+#' }
+#' @export
+#'
+ita.isomap <- function(dat, npc, k=3){
+  ddat <- vegan::vegdist(dat, method = "gower")
+  mvar <- try(vegan::isomap(dist=ddat, ndim=npc, fragmentedOK =TRUE, k=3), silent=TRUE)
+  if(!inherits(mvar, "try-error")){
+    co <- crossprod(as.matrix(dat), as.matrix(mvar$points))
+    pvar <- getpvar(mvar$points, co, dat, npc)
+    res <- list("ts"=mvar$points, "co"=co, "eig"= mvar$eig, 
+                "pvar"=pvar,"dat"=dat, "npc"=npc, "mita"="imap")
+  } else {
+    warning(mvar[1])
+    res <- list("ts"=NULL, "co"=NULL, "eig"= NULL, 
+                "pvar"=NULL, "dat"=dat, "npc"=npc, "mita"="ISOMAP")
+  }
+  return(res)
+}
 
 #ita --------------------------------------------
 #' Run Integrated Trend Analysis
@@ -416,7 +534,23 @@ ita.fca<- function(dat, npc){
 #' # Plot scores of variables
 #' plot_var(mvar)
 #'
-ita <- function(dat, npc, met=1, sca=TRUE, logt=FALSE){
+ita <- function(dat, npc, met="pca", sca=TRUE, logt=FALSE, ...){
+  #Check method
+  met <- tolower(met[1])
+  avmet <- c("pca", "dfa", "dpca", "mafa", "maf",
+             "ica", "sfa", "tsfa", "fca", "foreca", 
+             "lle", "pcav", "varimax", "pcavar",
+             "mds", "nmds", "isomds", "tsne", "sne", 
+             "rtsne", "imap", "isomap")
+  goodmet <- paste(c("pca", "dfa", "dpca", "mafa",
+             "ica", "tsfa", "fca", "lle", "varimax", 
+             "mds", "nmds", "tsne", "isomap"), 
+             collapse=", ")
+  if (!met %in%avmet) {
+    warning(paste(met, "is not a recognised method. Use recognised method:\n", goodmet))
+  }
+    
+  
   #Pre-process the dataset
   if (logt){
     dat <- log(dat+ifelse(min(dat)<=0, abs(min(dat))+1, 0))
@@ -430,60 +564,74 @@ ita <- function(dat, npc, met=1, sca=TRUE, logt=FALSE){
   
   #Multivariate analysis
   #Principal Component Analysis
-  if(tolower(met)%in%c("1", "pca")){
+  if(tolower(met)%in%c("pca")){
     mvar <- ita.pca(dat, npc)
   }
   
   #Dynamic Factor Analysis
-  if(tolower(met)%in%c("2", "dfa")){
+  if(tolower(met)%in%c("dfa")){
     mvar <- ita.dfa(dat, npc)
   }
   
   #Dynamic PCA
-  if(tolower(met)%in%c("3", "dpca")){
-    mvar <- ita.dpca(dat, npc)
+  if(tolower(met)%in%c("dpca")){
+    mvar <- ita.dpca(dat, npc, ...)
   }
   
   #Min/Max Autocorrelation Factors Analysis
-  if(tolower(met)%in%c("4", "mafa", "maf")){
+  if(tolower(met)%in%c("mafa", "maf")){
     mvar <- ita.mafa(dat, npc)
   }
   
   # Independent Component Analysis
-  if(tolower(met)%in%c("5", "ica")){
+  if(tolower(met)%in%c("ica")){
     mvar <- ita.ica(dat, npc)
   }  
   
   # Slow Feature Analysis
-  if(tolower(met)%in%c("6", "sfa")){
+  if(tolower(met)%in%c("sfa")){
     mvar <- ita.sfa(dat, npc)
   }
   
   # Time-series Factor Analysis
-  if(tolower(met)%in%c("7", "tsfa")){
+  if(tolower(met)%in%c("tsfa")){
     mvar <- ita.tsfa(dat, npc)
   }  
   
   #Forecastable Component Analysis
-  if (tolower(met)%in%c("8", "fca", "foreca")){
+  if (tolower(met)%in%c("fca", "foreca")){
     mvar <- ita.fca(dat, npc)
   }
   
   #Local Linear Embedding
-  if (tolower(met)%in%c("9", "lle")){
+  if (tolower(met)%in%c("lle")){
     mvar <- ita.lle(dat, npc)
   }
   
   #PCA + Varimax
-  if (tolower(met)%in%c("10", "pcav", "varimax", "pcavar")){
+  if (tolower(met)%in%c("pcav", "varimax", "pcavar")){
     mvar <- ita.pcaV(dat, npc)
   }
   
   #Multidimensional scaling 
-  if (tolower(met)%in%c("11", "mds")){
+  if (tolower(met)%in%c("mds")){
     mvar <- ita.mds(dat, npc)
   }
   
+  #Nonmetric multidimensional scaling 
+  if (tolower(met)%in%c("nmds", "isomds")){
+    mvar <- ita.nmds(dat, npc)
+  }
+  
+  #t-distributed Stochastic Neighbor Embedding
+  if (tolower(met)%in%c("tsne", "sne", "rtsne")){
+    mvar <- ita.tsne(dat, npc)
+  }
+  
+  #isomap
+  if (tolower(met)%in%c("imap", "isomap")){
+    mvar <- ita.isomap(dat, npc, ...)
+  }
   return(mvar)
 }
 

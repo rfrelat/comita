@@ -25,3 +25,11 @@ Output of ITA with
 \description{
 Run Multidimensional scaling
 }
+\note{
+lag set to 1, which correspond to AR1 processes
+Function based on dpca from freqdom package
+}
+\references{
+Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
+Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
+}

@@ -4,7 +4,8 @@
 \name{baltic}
 \alias{baltic}
 \title{Dynamics of Baltic Sea ecosystem}
-\format{A data frame with 32 rows (corresponding to 32 years) and 14 variables:
+\format{
+A data frame with 32 rows (corresponding to 32 years) and 14 variables:
 \describe{
   \item{Cod}{Cod (Gadus morhua) spawner biomass, in tonnes}
   \item{Herring}{Herring (Clupea harengus) spawner biomass, in tonnes}
@@ -20,7 +21,8 @@
   \item{SSS}{Sea surface salinity in Gotland basin in spring, in psu}
   \item{O2}{Deep oxygen concentration in Gotland basin in spring, in mL.L-1}
   \item{Anoxic}{Anoxic area}
-}}
+}
+}
 \source{
 ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea \url{https://www.ices.dk/community/groups/Pages/WGIAB.aspx}
 }

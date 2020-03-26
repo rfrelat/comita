@@ -63,8 +63,8 @@ cor_rand <- function(ts1, ts2, nrep=100, metrand="phase", ...){
 #' @export
 #'
 pc_test <- function(dat, nrep=100, metrand="rand", sca = TRUE, logt = FALSE){
-  mvar <- ita(dat, npc=3, met=1, sca=sca, logt=logt)
-  randeig <- ita.nrand(dat, npc=3, met=1, sca=sca, logt=logt, metrand=metrand, nrep=nrep)
+  mvar <- ita(dat, npc=3, met="pca", sca=sca, logt=logt)
+  randeig <- ita.nrand(dat, npc=3, met="pca", sca=sca, logt=logt, metrand=metrand, nrep=nrep)
   mateig <- matrix(rep(mvar$eig/sum(mvar$eig) * 100, each=nrep), nrow=nrep)
   pval <- 1-apply(mateig>randeig, 2, sum)/nrep
   res <- list("eig"=mvar$eig, "pvalue"=pval)

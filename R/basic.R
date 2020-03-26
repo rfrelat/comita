@@ -117,14 +117,18 @@ shorten <- function(dat, nchar = 3){
 #' @export
 #'
 negPC <- function(mvar){
+  if (!is.null(mvar$ts)){
   # check if slope of regression >0
-  for (i in 1:mvar$npc){
-    if(trend(mvar$ts[,i])>0){
-      mvar$ts[,i] <- -mvar$ts[,i]
-      if (!is.null(mvar$co)){
-        mvar$co[,i] <- -mvar$co[,i]
+    for (i in 1:mvar$npc){
+      if(trend(mvar$ts[,i])>0){
+        mvar$ts[,i] <- -mvar$ts[,i]
+        if (!is.null(mvar$co)){
+          mvar$co[,i] <- -mvar$co[,i]
+        }
       }
     }
+  } else {
+    warning("ts is null")
   }
   return(mvar)
 }
