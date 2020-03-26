@@ -16,6 +16,8 @@ ita(dat, npc, met = "pca", sca = TRUE, logt = FALSE, ...)
 \item{sca}{whether columns of the original data are scaled (default =TRUE)}
 
 \item{logt}{whether the culumns are log-transformed (default=FALSE)}
+
+\item{...}{additional information}
 }
 \value{
 Output of ITA with 

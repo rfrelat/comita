@@ -17,4 +17,5 @@
 #' @import stats
 #' @import MARSS
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom foreach %dopar%
 NULL

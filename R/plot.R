@@ -244,7 +244,8 @@ plot_compts <- function(dat, multimvar, col=NULL,
 #' @param pc which dimension to plot (default pc=1)
 #' @param showleg whether to plot a legend (default showleg = TRUE)
 #' @param shortname short name of the variables, use for plotting only
-#'
+#' @param pccor compare best correlated PC, or fixed (default = TRUE)
+#' 
 #' @return The pairwize correlation of variable scores compared to the first ITA of \code{multimvar}.
 #' @examples
 #' #' # Load data
@@ -254,7 +255,7 @@ plot_compts <- function(dat, multimvar, col=NULL,
 #' plot_compvar(baltic, multi)
 #' @export
 #'
-plot_compvar <- function(dat, multimvar, col=NULL, 
+plot_compvar <- function(dat, multimvar, col=NULL, pccor=TRUE, 
                          pc=1, showleg=TRUE, shortname=short(colnames(dat))){
   lab <- shortname
   odPC <- order(multimvar[[1]]$co[,pc])
@@ -268,23 +269,38 @@ plot_compvar <- function(dat, multimvar, col=NULL,
     }
   }
   
+  if (pccor){
+    npc <- pc
+    for (i in 2:length(multimvar)){
+      corI <- cor(cbind(multimvar[[1]]$ts[,pc], multimvar[[i]]$ts))
+      pcI <- which.max(abs(corI[-1,1]))
+      npc <- c(npc, pcI)
+      if(corI[-1,1][pcI]<0){
+        multimvar[[i]]$ts[,pcI] <- -multimvar[[i]]$ts[,pcI]
+        multimvar[[i]]$co[,pcI] <- -multimvar[[i]]$co[,pcI]
+      }
+    }
+  } else {
+    npc <- rep(pc, length(multimvar))
+  }
+  
   if (showleg){
     layout(matrix(1:2, ncol = 2), widths = c(3,1))
     par(mar=c(3,0,1,0))
   }
   
-  dotchart(as.numeric(scale(multimvar[[1]]$co[odPC,pc])), 
+  dotchart(as.numeric(scale(multimvar[[1]]$co[odPC,npc[1]])), 
            labels = lab[odPC], pch=16, xlim=c(-2.2, 2.2), 
            xlab=paste0("PC",pc))
   
   for (i in 1:length(multimvar)){
     if(!is.null(multimvar[[i]]$co)){
-      points(scale(multimvar[[i]]$co[odPC,pc]), 1:nrow(multimvar[[i]]$co), pch=16, col=col[i])
+      points(scale(multimvar[[i]]$co[odPC,npc[i]]), 1:nrow(multimvar[[i]]$co), pch=16, col=col[i])
     }
   }
   
   #Legend : pairwize correlation
-  leg <- c(names(multimvar)[1])
+  leg <- c(paste0(names(multimvar)[1],npc[1]))
   alpha <- c(0, 0.001, 0.01, 0.05, 0.1, 1)
   stars <- c("***", "**", "*", ".", " ")
   corbio <- c()
@@ -292,8 +308,8 @@ plot_compvar <- function(dat, multimvar, col=NULL,
   if (length(multimvar)>1){
     for (i in 2:length(multimvar)){
       if(!is.null(multimvar[[i]]$co)){
-        cor1i <- cor.test(multimvar[[1]]$co[,pc], multimvar[[i]]$co[,pc])
-        leg <- c(leg, paste0(names(multimvar)[i], ": ", round(cor1i$estimate,2), symnum(cor1i$p.value, alpha, stars)))
+        cor1i <- cor.test(multimvar[[1]]$co[,npc[1]], multimvar[[i]]$co[,npc[i]])
+        leg <- c(leg, paste0(names(multimvar)[i],npc[i], ": ", round(cor1i$estimate,2), symnum(cor1i$p.value, alpha, stars)))
         coleg <-  c(coleg, col[i])
         corbio <- c(corbio, cor1i$estimate, cor1i$p.value)
       }

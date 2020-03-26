@@ -5,7 +5,16 @@
 \title{Visualy compare the scores of the time series on reduced dimensions
 from different methods of Integrated Trend Analysis}
 \usage{
-plot_compts(dat, multimvar, col = NULL, pc = 1, showleg = TRUE, ...)
+plot_compts(
+  dat,
+  multimvar,
+  col = NULL,
+  pc = 1,
+  showleg = TRUE,
+  mar4 = 5,
+  pccor = TRUE,
+  ...
+)
 }
 \arguments{
 \item{dat}{original dataset}
@@ -17,6 +26,10 @@ plot_compts(dat, multimvar, col = NULL, pc = 1, showleg = TRUE, ...)
 \item{pc}{which dimension to plot (default pc=1)}
 
 \item{showleg}{whether to plot a legend (default showleg = TRUE)}
+
+\item{mar4}{additionnal margin on the right side of the plot}
+
+\item{pccor}{compare best correlated PC, or fixed (default = TRUE)}
 
 \item{...}{additional arguments to plot()}
 }

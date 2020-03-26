@@ -502,6 +502,7 @@ ita.isomap <- function(dat, npc, k=3){
 #' @param met selected ITA method
 #' @param sca whether columns of the original data are scaled (default =TRUE)
 #' @param logt whether the culumns are log-transformed (default=FALSE)
+#' @param ... additional information
 #' @details
 #' Variable \code{met} are either string or number indicating: 
 #' \itemize{

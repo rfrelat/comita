@@ -103,7 +103,7 @@ multitaP <- function(dat, npc, met=c("pca","mds"), sca =TRUE, logt=FALSE, nCores
   if (nCores>cores) {nCores=cores}
   cl<-parallel::makeCluster(nCores)
   doParallel::registerDoParallel(nCores)
-  
+  i <- 1
   multimvar <- foreach::foreach(i=seq_along(met)) %dopar% {
     newmvar <- ita(dat, npc, met=met[i], sca = sca, logt=logt)
     if (!is.null(newmvar$ts)){
@@ -113,7 +113,7 @@ multitaP <- function(dat, npc, met=c("pca","mds"), sca =TRUE, logt=FALSE, nCores
   }
   metname <- sapply(multimvar, FUN = function(dat){dat$mita})
   names(multimvar) <- metname 
-  stopCluster(cl)
+  parallel::stopCluster(cl)
   return(multimvar)
 }
 

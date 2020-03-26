@@ -57,7 +57,10 @@ shinyServer(function(input, output, session) {
     
     ##Multivariate method
     npc <- input$npc
-    mvar <- ita(tab, npc = input$npc, met = input$met, 
+    
+    metconv <- c("pca", "dfa", "dpca", "mafa", 
+                 "tsfa", "fca", "lle", "mds")
+    mvar <- ita(tab, npc = input$npc, met = metconv[as.numeric(input$met)], 
                 sca = TRUE, logt = input$log)
     
     #Change PC to have negative trends
@@ -88,7 +91,7 @@ shinyServer(function(input, output, session) {
       
       #compare to random
       if(input$ran & input$met==1){
-        randeig <- ita.nrand(tab, nrep = input$nr, met = input$met, sca = TRUE,
+        randeig <- ita.nrand(tab, nrep = input$nr, met = metconv[as.numeric(input$met)], sca = TRUE,
                              logt = input$log, metrand = input$metrand, npc = input$npc)
         plot_nrand(mvar, randeig)
         # lines(barx$barx, apply(randeig,2,q95), col="red", 
@@ -126,7 +129,7 @@ shinyServer(function(input, output, session) {
     #   input$npc <- npc2
     # }
     met <- unique(c(as.numeric(input$met), as.numeric(input$multimet)))
-    mvar <- multita(tab, npc = input$npc, met = met,
+    mvar <- multita(tab, npc = input$npc, met = metconv[as.numeric(met)],
              sca = TRUE, logt = input$log)
     
     ##Visualization

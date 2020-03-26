@@ -9,6 +9,7 @@ plot_compvar(
   dat,
   multimvar,
   col = NULL,
+  pccor = TRUE,
   pc = 1,
   showleg = TRUE,
   shortname = short(colnames(dat))
@@ -20,6 +21,8 @@ plot_compvar(
 \item{multimvar}{results of multiple ita (from multita function)}
 
 \item{col}{pallette of colors for the different methods of Integrated Trend Analysis}
+
+\item{pccor}{compare best correlated PC, or fixed (default = TRUE)}
 
 \item{pc}{which dimension to plot (default pc=1)}
 

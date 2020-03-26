@@ -14,12 +14,15 @@ Depends:
   stats
 Imports: 
   ade4, 
+  doParallel,
   fastICA,
+  foreach,
   ForeCA,
   fractal,
   freqdom,
   lle,
   MASS,
+  parallel,
   RColorBrewer,
   Rtsne,
   shiny,
