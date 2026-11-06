@@ -7,21 +7,21 @@
 ita.tsne(dat, npc, p = 2)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of new dimensions}
 
 \item{p}{perplexity parameter (not bigger than 3 * perplexity < nrow(X) - 1)}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
-\item \code{co} NULL - no scores of the variables on the new dimensions 
-\item \code{eig} NULL 
+\item \code{ts} scores of the time series on the new dimensions
+\item \code{co} NULL - no scores of the variables on the new dimensions
+\item \code{eig} NULL
 \item \code{dat} original dataset
 \item \code{npc} number of new dimensions
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{

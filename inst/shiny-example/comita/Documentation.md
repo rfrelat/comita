@@ -9,19 +9,17 @@ The application comes with a R-package \code{comita} that can reproduce and make
 
 It is impossible to list all the dimension reduction techniques that exist, but we implemented the most common ones that (1) are used by ecologists, and (2) have been implemented in \code{R}.
 
-|  Abb |                 Method                |                References               |
-|:----:|:-------------------------------------:|:--------------------------------------:|
-| PCA  | Principal Component Analysis          | [Pearson, 1901](https://doi.org/10.1080/14786440109462720)|
-| PCAV | PCA + Varimax                         | [Kaiser, 1958](https://doi.org/10.1007/BF02289233)|
-| DFA  | Dynamic Factor Analysis               | [Zuur et al., 2003](https://doi.org/10.1002/env.611)|
-| DPCA | Dynamic principle components analysis | [Ku et al., 1995](https://www.sciencedirect.com/science/article/pii/0169743995000763), [Ketelaere et al., 2015](https://doi.org/10.1080/00224065.2015.11918137)|
-| TSFA | Time-series Factor Analysis           | [Gilbert and Meijer, 2005](http://hdl.handle.net/11370/d7d4ea3d-af1d-487a-b9b6-c0816994ef5a)|
-| FCA  | Forecastable Component Analysis       | [Goerg, 2013](https://arxiv.org/abs/1205.4591) |
-| MDS  | Multidimensional scaling              | [Kruskal 1964](https://doi.org/10.1007/BF02289565)|
-| LLE  | Locally Linear Embedding              | [Roweis and Saul, 2000](https://doi.org/10.1126/science.290.5500.2323)|
-|      |                                       |                                        |
-
-
-
-
+|  Abb   |                 Method                |                References               |
+|:------:|:-------------------------------------:|:--------------------------------------:|
+| PCA    | Principal Component Analysis          | [Pearson, 1901](https://doi.org/10.1080/14786440109462720) |
+| PCAV   | PCA + Varimax                         | [Kaiser, 1958](https://doi.org/10.1007/BF02289233) |
+| DPCA   | Dynamic principal components analysis | [Ku et al., 1995](https://www.sciencedirect.com/science/article/pii/0169743995000763), [De Ketelaere et al., 2015](https://doi.org/10.1080/00224065.2015.11918137) |
+| RPCA   | Robust PCA (ROBPCA)                   | [Hubert et al., 2005](https://doi.org/10.1198/004017004000000563) |
+| KPCA   | Kernel PCA                            | [Schölkopf et al., 1998](https://doi.org/10.1007/978-1-4471-1599-1_18) |
+| MAFA   | Min/Max Autocorrelation Factor Analysis | [Solow, 1994](https://doi.org/10.2307/2533401) |
+| t-SNE  | t-distributed Stochastic Neighbor Embedding | [van der Maaten and Hinton, 2008](https://www.jmlr.org/papers/v9/vandermaaten08a.html) |
+| Isomap | Isometric Feature Mapping             | [Tenenbaum et al., 2000](https://doi.org/10.1126/science.290.5500.2319) |
+| UMAP   | Uniform Manifold Approximation and Projection | [McInnes et al., 2018](https://arxiv.org/abs/1802.03426) |
+| DFA    | Dynamic Factor Analysis               | [Zuur et al., 2003](https://doi.org/10.1002/env.611) |
+| ForeCA | Forecastable Component Analysis       | [Goerg, 2013](https://arxiv.org/abs/1205.4591) |
 

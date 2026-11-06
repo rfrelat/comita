@@ -44,7 +44,7 @@ from different methods of Integrated Trend Analysis
 # Load data
 data(baltic)
 # Run ita
-multi <- multita(baltic, npc=2, met=c("pca", "tsfa"))
+multi <- multita(baltic, npc=2, met=c("pca", "pcoa"))
 # Compare scores of time series
 plot_compts(baltic, multi)
 }

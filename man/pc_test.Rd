@@ -4,7 +4,13 @@
 \alias{pc_test}
 \title{Compute p-values for principal component eigen values}
 \usage{
-pc_test(dat, nrep = 100, metrand = "rand", sca = TRUE, logt = FALSE)
+pc_test(
+  dat,
+  nrep = 100,
+  metrand = c("phase", "rand", "trend"),
+  sca = TRUE,
+  logt = FALSE
+)
 }
 \arguments{
 \item{dat}{matrix with}
@@ -24,7 +30,7 @@ p-values of eigen values
 Compute p-values for principal component eigen values
 }
 \details{
-Variable \code{met} can be "phase", "rand" or "trend": 
+Variable \code{met} can be "phase", "rand" or "trend":
 \itemize{
 \item \code{phase} keep similar phase structure in the dataset
 \item \code{rand} randomly generated data with similar mean and sd

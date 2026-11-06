@@ -37,7 +37,7 @@ Extension of ita.rand to generate multiple datasets
 }
 \examples{
 data(baltic)
-#matrice of eigen values with multiple randomly generated dataset 
+#matrice of eigen values with multiple randomly generated dataset
 mrand <- ita.nrand(baltic)
 
 # To be compared with eigen values with real observations

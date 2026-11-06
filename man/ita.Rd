@@ -7,7 +7,7 @@
 ita(dat, npc, met = "pca", sca = TRUE, logt = FALSE, ...)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of new dimensions}
 
@@ -15,33 +15,34 @@ ita(dat, npc, met = "pca", sca = TRUE, logt = FALSE, ...)
 
 \item{sca}{whether columns of the original data are scaled (default =TRUE)}
 
-\item{logt}{whether the culumns are log-transformed (default=FALSE)}
+\item{logt}{whether the columns are log-transformed (default=FALSE)}
 
 \item{...}{additional information}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
+\item \code{ts} scores of the time series on the new dimensions
 \item \code{co} scores of the variables on the new dimensions (if any)
 \item \code{eig} eigen values (for PCA associated methods)
 \item \code{dat} dataset used for ITA
 \item \code{npc} number of new dimensions
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{
 Run Integrated Trend Analysis
 }
 \details{
-Variable \code{met} are either string or number indicating: 
+Variable \code{met} is one of the method abbreviation among
+  pca, dfa, dpca, mafa, ica, fca, varimax, mds, nmds, tsne, isomap
 \itemize{
-\item \code{ita.pca} scores of the time series on the new dimensions 
+\item \code{ita.pca} scores of the time series on the new dimensions
 \item \code{ita.pcaV} scores of the variables on the new dimensions (if any)
 \item \code{ita.} eigen values (for PCA associated methods)
 \item \code{ita.} dataset used for ITA
 \item \code{ita.} number of new dimensions
-\item \code{ita.} method used for integrated trend analysis 
+\item \code{ita.} method used for integrated trend analysis
 }
 }
 \examples{

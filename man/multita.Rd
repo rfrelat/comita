@@ -18,14 +18,14 @@ multita(dat, npc, met = c("pca", "nmds"), sca = TRUE, logt = FALSE)
 \item{logt}{whether the culumns are log-transformed (default=FALSE)}
 }
 \value{
-A list of output from \code{ita} with 
+A list of output from \code{ita} with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
+\item \code{ts} scores of the time series on the new dimensions
 \item \code{co} scores of the variables on the new dimensions (if any)
 \item \code{eig} eigen values (for PCA associated methods)
 \item \code{dat} dataset used for ITA
 \item \code{npc} number of new dimensions
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 Additionnally, information about computing time is saved in \code{cptime}
 }
@@ -33,14 +33,14 @@ Additionnally, information about computing time is saved in \code{cptime}
 Run multiple Integrated Trend Analysis
 }
 \details{
-Variable \code{met} are either string or number indicating: 
+Variable \code{met} are either string or number indicating:
 \itemize{
 \item \code{ita.pca} eeee
 \item \code{ita.pcaV} scores of the variables on the new dimensions (if any)
 \item \code{ita.} eigen values (for PCA associated methods)
 \item \code{ita.} dataset used for ITA
 \item \code{ita.} number of new dimensions
-\item \code{ita.} method used for integrated trend analysis 
+\item \code{ita.} method used for integrated trend analysis
 }
 }
 \note{

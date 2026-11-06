@@ -7,21 +7,19 @@
 ita.pca(dat, npc)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of selected principal components}
-
-\item{...}{optional arguments passed to multivariate function}
 }
 \value{
-Result of multivariate analysis with 
+Result of multivariate analysis with
 \itemize{
 \item \code{ts} scores of the time on the principal component
 \item \code{co} scores of the variables on the principal component
 \item \code{eig} eigen values
 \item \code{dat} original dataset
 \item \code{npc} number of selected principal component
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{

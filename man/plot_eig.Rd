@@ -17,7 +17,7 @@ plot_eig(mvar, leg = TRUE, cum = FALSE, ...)
 }
 \value{
 A barplot of eigen vectors with percentage of variance explained in the successive components.
-Also return an object with 
+Also return an object with
 \itemize{
 \item \code{barx} the x-positions of the bars in the ploting window
 \item \code{perc} percentage of variance explained in the successive PC

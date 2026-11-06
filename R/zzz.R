@@ -1,0 +1,32 @@
+# Maps each method name to its accepted name and implementation.
+# Internal: not exported.
+.itamet <- c(
+  "pca" = "pca",
+  "pcav" = "pcaV",
+  "varimax" = "pcaV",
+  "pcavar" = "pcaV",
+  "dpca" = "dpca",
+  "dynamicpca" = "dpca",
+  "rpca" = "rpca",
+  "robpca" = "rpca",
+  "robustpca" = "rpca",
+  "kpca" = "kpca",
+  "kernelpca" = "kpca",
+  "pcoa" = "pcoa",
+  "mds" = "pcoa",
+  "nmds" = "nmds",
+  "dfa" = "dfa",
+  "mafa" = "mafa",
+  "maf" = "mafa",
+  "ica" = "ica",
+  "sfa" = "sfa",
+  "fca" = "fca",
+  "foreca" = "fca",
+  "tsne" = "tsne",
+  "sne" = "tsne",
+  "rtsne" = "tsne",
+  "imap" = "isomap",
+  "isomap" = "isomap",
+  "umap" = "umap",
+  "lle" = "lle"
+)

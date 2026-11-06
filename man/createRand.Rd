@@ -18,7 +18,7 @@ a randomly generated matrix of similar size than \code{dat}
 Create a random dataset with similar characteristics than original data
 }
 \details{
-Variable \code{metrand} can be "phase", "rand" or "trend": 
+Variable \code{metrand} can be "phase", "rand" or "trend":
 \itemize{
 \item \code{phase} keep similar phase structure in the dataset
 \item \code{rand} randomly generated data with similar mean and sd

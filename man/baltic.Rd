@@ -26,7 +26,7 @@ ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea \url{https
 baltic
 }
 \description{
-A dataset containing time series of multiple components of 
+A dataset containing time series of multiple components of
 the Gotland basin ecosystem in spring between 1980 and 2011.
 }
 \references{

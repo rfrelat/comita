@@ -35,6 +35,6 @@ data(baltic)
 mvar <- ita(baltic, npc=2)
 #Eigen values with randomly generated data
 mrand <- ita.nrand(baltic, nrep = 50)
-# plot observed eigen value compared to null model 
+# plot observed eigen value compared to null model
 plot_randtest(mvar, mrand)
 }

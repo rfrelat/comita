@@ -7,26 +7,26 @@
 ita.sfa(dat, npc)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of new dimensions}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
-\item \code{co} NULL - no scores of the variables on the new dimensions 
-\item \code{eig} NULL 
+\item \code{ts} scores of the time series on the new dimensions
+\item \code{co} scores of the variables on the new dimensions
+\item \code{eig} NULL
 \item \code{dat} original dataset
 \item \code{npc} number of new dimensions
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{
 Run Slow Feature Analysis
 }
 \note{
-Use function from a package.
+Use function `sfa1()` from package rSFA
 }
 \references{
 Wiskott L, Sejnowski TJ (2002) Slow Feature Analysis: Unsupervised Learning of Invariances. Neural Comput 14:715–770

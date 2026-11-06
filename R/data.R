@@ -1,7 +1,7 @@
 #' Dynamics of Baltic Sea ecosystem
 #'
-#' A dataset containing time series of multiple components of 
-#' the Gotland basin ecosystem in spring between 1980 and 2011. 
+#' A dataset containing time series of multiple components of
+#' the Gotland basin ecosystem in spring between 1980 and 2011.
 #'
 #' @format A data frame with 32 rows (corresponding to 32 years) and 10 variables:
 #' \describe{

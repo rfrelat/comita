@@ -4,32 +4,35 @@
 \alias{ita.nmds}
 \title{Run Nonmetric Multidimensional scaling}
 \usage{
-ita.nmds(dat, npc)
+ita.nmds(dat, npc, dist = "bray", trymax = 20)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of processes}
+
+\item{dist}{distance method (by default `bray`)}
+
+\item{trymax}{maximum number of try}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
-\item \code{co} NULL - no scores of the variables on the new dimensions 
-\item \code{eig} NULL 
+\item \code{ts} scores of the time series on the new dimensions
+\item \code{co} NULL - no scores of the variables on the new dimensions
+\item \code{eig} NULL
 \item \code{dat} original dataset
 \item \code{npc} number of selected principal component
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{
 Run Nonmetric Multidimensional scaling
 }
 \note{
-Use MASS::isoMDS
-Function based on dpca from freqdom package
+Use vegan::metaMDS and MASS::isoMDS
 }
 \references{
-Ku W, Storer RH, Georgakis C (1995) Disturbance detection and isolation by dynamic principal component analysis. Chemom Intell Lab Syst 30:179–196
-Ketelaere B De, Hubert M, Schmitt E (2015) Overview of PCA-based statistical process-monitoring methods for time-dependent, high-dimensional data. J Qual Technol 47:318–335
+Faith, D. P, Minchin, P. R. and Belbin, L. (1987). Compositional dissimilarity as a robust measure of ecological distance. Vegetatio 69, 57–68.
+Kruskal, J.B. (1964). Nonmetric multidimensional scaling: a numerical method. Psychometrika 29, 115–129.
 }

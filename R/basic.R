@@ -5,13 +5,13 @@
 #'
 #' @param ts time series
 #' @return value of autocorrelation of lag 1
-#' @examples 
+#' @examples
 #' data(baltic)
 #' ar1(baltic$Cod)
 #' @seealso \code{\link{infoTS}}
 #' @export
 #'
-ar1 <- function(ts){
+ar1 <- function(ts) {
   return(stats::acf(ts, plot = FALSE)$acf[2])
 }
 
@@ -25,16 +25,16 @@ ar1 <- function(ts){
 #' trend(baltic$Cod)
 #' @export
 #'
-trend <- function(ts){
+trend <- function(ts) {
   xseq <- 1:length(ts)
-  lm1 <- lm(ts~xseq)
+  lm1 <- lm(ts ~ xseq)
   return(lm1$coefficients[2])
 }
 
 # infoTS -------------------------------------------
 #' Return a set of statistics on the original dataset
 #'
-#' @param dat matrix of time series (time in rows, variables in columns) 
+#' @param dat matrix of time series (time in rows, variables in columns)
 #' @return characteristics of the dataset, including
 #' \describe{
 #'   \item{nbio}{number of biological time series}
@@ -50,21 +50,21 @@ trend <- function(ts){
 #' @seealso \code{\link{ar1}}
 #' @export
 #'
-infoTS <- function(dat){
+infoTS <- function(dat) {
   info <- c()
   #Characteritics of the matrix
-  info$nbio <- ncol(dat) 
+  info$nbio <- ncol(dat)
   info$ntime <- nrow(dat)
   #Autocorrelation 1
-  autocorr <- apply(dat,2,ar1)
+  autocorr <- apply(dat, 2, ar1)
   info$meanAR <- mean(autocorr)
   info$maxAR <- max(autocorr)
   #Pairwize correlation
   paircor <- stats::cor(dat)
   #remove diagonal
   diag(paircor) <- NA
-  info$meanCor <- mean(abs(paircor), na.rm=TRUE)
-  info$maxCor <- max(abs(paircor), na.rm=TRUE)
+  info$meanCor <- mean(abs(paircor), na.rm = TRUE)
+  info$maxCor <- max(abs(paircor), na.rm = TRUE)
   return(info)
 }
 
@@ -75,8 +75,8 @@ infoTS <- function(dat){
 #' @return quantile(dat, prob=0.95)
 #' @export
 #'
-q95 <- function(dat){
-  return(quantile(dat, prob=0.95))
+q95 <- function(dat) {
+  return(quantile(dat, prob = 0.95))
 }
 
 # short -------------------------------------------
@@ -90,20 +90,24 @@ q95 <- function(dat){
 #' short(names(baltic))
 #' @export
 #'
-short <- function(dat, nchar = 3){
+short <- function(dat, nchar = 3) {
   #find the separator
-  sepL <- c(length(grep("\\.", dat)), length(grep("_", dat)), length(grep(" ", dat)))
+  sepL <- c(
+    length(grep("\\.", dat)),
+    length(grep("_", dat)),
+    length(grep(" ", dat))
+  )
   sep <- c("\\.", "_", " ")[which.max(sepL)]
   #split
   return(unlist(lapply(strsplit(dat, sep), shorten)))
 }
 
 #' @rdname short
-shorten <- function(dat, nchar = 3){
-  if (length(dat)>1){
+shorten <- function(dat, nchar = 3) {
+  if (length(dat) > 1) {
     new <- paste(substr(dat[1], 1, nchar), substr(dat[2], 1, nchar), sep = "_")
   } else {
-    new <- substr(dat[1], 1, nchar*2)
+    new <- substr(dat[1], 1, nchar * 2)
   }
   return(new)
 }
@@ -113,17 +117,17 @@ shorten <- function(dat, nchar = 3){
 #' (internal function)
 #'
 #' @param mvar results of integrative trend analysis (from ita function)
-#' @return same object as input, but with scores multiplied by -1 if needed to get a negative trend 
+#' @return same object as input, but with scores multiplied by -1 if needed to get a negative trend
 #' @export
 #'
-negPC <- function(mvar){
-  if (!is.null(mvar$ts)){
-  # check if slope of regression >0
-    for (i in 1:mvar$npc){
-      if(trend(mvar$ts[,i])>0){
-        mvar$ts[,i] <- -mvar$ts[,i]
-        if (!is.null(mvar$co)){
-          mvar$co[,i] <- -mvar$co[,i]
+negPC <- function(mvar) {
+  if (!is.null(mvar$ts)) {
+    # check if slope of regression >0
+    for (i in 1:mvar$npc) {
+      if (trend(mvar$ts[, i]) > 0) {
+        mvar$ts[, i] <- -mvar$ts[, i]
+        if (!is.null(mvar$co)) {
+          mvar$co[, i] <- -mvar$co[, i]
         }
       }
     }
@@ -142,15 +146,20 @@ negPC <- function(mvar){
 #' @note Inspired from https://pbil.univ-lyon1.fr/
 #' @export
 #'
-panel.cor.m <- function(x, y, digits=2)
-{
-  usr <- par("usr"); on.exit(par(usr))
+panel.cor.m <- function(x, y, digits = 2) {
+  usr <- par("usr")
+  on.exit(par(usr))
   graphics::par(usr = c(0, 1, 0, 1))
-  r <- stats::cor(x, y,method = "pearson", use = "pairwise.complete.obs")
-  r2 <- abs(cor(x, y,method = "pearson", use = "pairwise.complete.obs"))
-  txt <- format(c(r, 0.123456789), digits=digits)[1]
-  cex <- 0.8/graphics::strwidth(txt)
-  test <- stats::cor.test(x,y,method = "pearson",use = "pairwise.complete.obs")
+  r <- stats::cor(x, y, method = "pearson", use = "pairwise.complete.obs")
+  r2 <- abs(cor(x, y, method = "pearson", use = "pairwise.complete.obs"))
+  txt <- format(c(r, 0.123456789), digits = digits)[1]
+  cex <- 0.8 / graphics::strwidth(txt)
+  test <- stats::cor.test(
+    x,
+    y,
+    method = "pearson",
+    use = "pairwise.complete.obs"
+  )
   # borrowed from printCoefmat
   #Signif <- symnum(test$p.value, corr = FALSE, na = FALSE,
   #                 cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
@@ -163,20 +172,21 @@ panel.cor.m <- function(x, y, digits=2)
 #' Function to know the percentage of variance explained
 #' (internal function)
 #'
-#' @param ts scores of the time series on the new dimensions 
-#' @param co scores of the variables on the new dimensions 
-#' @param dat matrix with 
+#' @param ts scores of the time series on the new dimensions
+#' @param co scores of the variables on the new dimensions
+#' @param dat matrix with
 #' @param npc number of new dimensions
 #' @return the cumulated percentage of variance explained by the successive new dimensions
 #' @note inspired from https://ro-che.info/articles/2017-12-11-pca-explained-variance
 #' @export
 #'
 #
-getpvar <- function(ts, co, dat, npc){
+getpvar <- function(ts, co, dat, npc) {
   pvar <- c()
-  for (i in 1:npc){
-    pred <- as.matrix(ts[,1:i]) %*% as.matrix(t(co[,1:i]))
-    pvar <- c(pvar, stats::cor(as.vector(pred), as.vector(unlist(dat)))**2)
+  for (i in 1:npc) {
+    pred <- as.matrix(ts[, 1:i, drop = FALSE]) %*%
+      as.matrix(t(co[, 1:i, drop = FALSE]))
+    pvar <- c(pvar, stats::cor(as.vector(pred), as.vector(unlist(dat)))^2)
   }
   return(pvar)
 }

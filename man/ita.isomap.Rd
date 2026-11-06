@@ -7,21 +7,21 @@
 ita.isomap(dat, npc, k = 3)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of processes}
 
 \item{k}{Number of shortest dissimilarities retained for a point (default k=3)}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
-\item \code{co} NULL - no scores of the variables on the new dimensions 
-\item \code{eig} NULL 
+\item \code{ts} scores of the time series on the new dimensions
+\item \code{co} scores of the variables on the new dimensions
+\item \code{eig} NULL
 \item \code{dat} original dataset
 \item \code{npc} number of selected principal component
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{

@@ -4,29 +4,31 @@
 \alias{ita.lle}
 \title{Run Local Linear Embedding}
 \usage{
-ita.lle(dat, npc)
+ita.lle(dat, npc, k = 10)
 }
 \arguments{
-\item{dat}{matrix with}
+\item{dat}{matrix or data frame of time series (years in rows, variables in columns).}
 
 \item{npc}{number of new dimensions}
+
+\item{k}{number of nearest neighbors}
 }
 \value{
-Output of ITA with 
+Output of ITA with
 \itemize{
-\item \code{ts} scores of the time series on the new dimensions 
-\item \code{co} NULL - no scores of the variables on the new dimensions 
-\item \code{eig} NULL 
+\item \code{ts} scores of the time series on the new dimensions
+\item \code{co} NULL - no scores of the variables on the new dimensions
+\item \code{eig} NULL
 \item \code{dat} original dataset
 \item \code{npc} number of new dimensions
-\item \code{mita} method used for integrated trend analysis 
+\item \code{mita} method used for integrated trend analysis
 }
 }
 \description{
 Run Local Linear Embedding
 }
 \note{
-Use function lle from the lle package.
+Use function embed from the dimRed package.
 }
 \references{
 Roweis ST (2000) Nonlinear Dimensionality Reduction by Locally Linear Embedding. Science (80- ) 290:2323–2326

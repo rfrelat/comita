@@ -46,7 +46,3 @@ Woillez M, Rivoirard J, Petitgas P (2009) Using min/max autocorrelation factors 
 \author{
 M.Woillez and J. Rivoirard
 }
-\keyword{Analysis}
-\keyword{Autocorrelation}
-\keyword{Factors}
-\keyword{Min/Max}
