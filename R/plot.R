@@ -25,9 +25,6 @@ plot_heatmap <- function(
   n = 1,
   shortname = short(colnames(mvar$dat))
 ) {
-  op <- par(no.readonly = TRUE)
-  on.exit(par(op))
-
   odPC <- order(mvar$co[, n])
   bk <- quantile(mvar$dat, probs = seq(0, 1, length.out = length(col) + 1))
   bk <- bk + c(-0.1, rep(0, length(col) - 1), 0.1) #to be sure to include all values

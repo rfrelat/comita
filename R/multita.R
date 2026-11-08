@@ -3,8 +3,9 @@
 #' @param dat matrix with
 #' @param npc number of new dimensions
 #' @param met selected ITA methods (can be a vector of multiple methods)
-#' @param sca whether columns of the original data are scaled (default =TRUE)
-#' @param logt whether the culumns are log-transformed (default=FALSE)
+#' @param sca whether columns of the original data are scaled (default = TRUE)
+#' @param logt whether the culumns are log-transformed (default = FALSE)
+#' @param timelog show the computing time per method (default = FALSE)
 #' @details
 #' Variable \code{met} are either string or number indicating:
 #' \itemize{
@@ -34,7 +35,8 @@ multita <- function(
   npc,
   met = c("pca", "nmds"),
   sca = TRUE,
-  logt = FALSE
+  logt = FALSE, 
+  timelog = FALSE
 ) {
   multimvar <- list()
   cptime <- c()
@@ -65,7 +67,9 @@ multita <- function(
     }
   }
   names(cptime) <- names(multimvar)
-  print(cptime)
+  if (timelog){
+    print(cptime)
+  }
   attr(multimvar, "cptime") <- cptime
   return(multimvar)
 }

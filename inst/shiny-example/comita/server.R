@@ -78,12 +78,8 @@ shinyServer(function(input, output, session) {
     lab <- short(colnames(tab))
     fit <- mvar()
 
-    layout(matrix(1:4, ncol = 2), width = c(1.5, 1))
-    pal <- list(
-      "1" = c("springgreen4", "chartreuse3", "yellow", "darkgoldenrod1", "red"),
-      "2" = c("#a6611a", "#dfc27d", "#f5f5f5", "#80cdc1", "#018571"),
-      "3" = c("#d7191c", "#fdae61", "#ffffbf", "#abd9e9", "#2c7bb6")
-    )
+    layout(matrix(1:4, ncol = 2), width = c(3, 2))
+    # par(mfrow=c(2,2), mar = c(4, 2, 2, 0.1))
     col <- unlist(pal[input$pal])
 
     # 1. Heatmap
@@ -98,6 +94,7 @@ shinyServer(function(input, output, session) {
 
     # 2. PC time series
     par(mar = c(0.5, 4, 1, 0.1), xaxs = "i", yaxs = "i")
+    # plot_heatmap(fit, col, shortname = lab)
     plot_timeseries(fit)
 
     # 3. Eigenvalues (or Horn's comparison)
@@ -142,8 +139,8 @@ shinyServer(function(input, output, session) {
 
     ##Visualization
     layout(matrix(1:4, ncol = 2, byrow = TRUE), width = c(4, 1))
-    #col <- c("black", brewer.pal(9, "Set1")[met[-1]])
-    col <- c("black", rainbow(11)[met[-1]]) #
+    
+    col <- c("black", which(as.character(met_choices)%in% met[-1]))
     #1.  PC time series
     leg1 <- plot_compts(tab, mvar, col, showleg = FALSE, pc = npc2)
     plot.new()

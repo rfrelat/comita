@@ -4,7 +4,14 @@
 \alias{multita}
 \title{Run multiple Integrated Trend Analysis}
 \usage{
-multita(dat, npc, met = c("pca", "nmds"), sca = TRUE, logt = FALSE)
+multita(
+  dat,
+  npc,
+  met = c("pca", "nmds"),
+  sca = TRUE,
+  logt = FALSE,
+  timelog = FALSE
+)
 }
 \arguments{
 \item{dat}{matrix with}
@@ -13,9 +20,11 @@ multita(dat, npc, met = c("pca", "nmds"), sca = TRUE, logt = FALSE)
 
 \item{met}{selected ITA methods (can be a vector of multiple methods)}
 
-\item{sca}{whether columns of the original data are scaled (default =TRUE)}
+\item{sca}{whether columns of the original data are scaled (default = TRUE)}
 
-\item{logt}{whether the culumns are log-transformed (default=FALSE)}
+\item{logt}{whether the culumns are log-transformed (default = FALSE)}
+
+\item{timelog}{show the computing time per method (default = FALSE)}
 }
 \value{
 A list of output from \code{ita} with
