@@ -20,7 +20,6 @@ Imports:
     grDevices,
     kernlab,
     MARSS,
-    markdown,
     RColorBrewer,
     rrcov,
     rSFA,
