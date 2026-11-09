@@ -129,18 +129,20 @@ shinyServer(function(input, output, session) {
     npc2 <- as.numeric(input$npc2)
 
     met <- unique(c(input$met, input$multimet))
-    mvar <- multita(
-      tab,
-      npc = input$npc,
-      met = met,
-      sca = TRUE,
-      logt = input$log
-    )
+    withProgress(message = "Running multiple ITA...", value = 0.5, {
+      mvar <- multita(
+        tab,
+        npc = input$npc,
+        met = met,
+        sca = TRUE,
+        logt = input$log
+      )
+    })
 
     ##Visualization
     layout(matrix(1:4, ncol = 2, byrow = TRUE), width = c(4, 1))
-    
-    col <- c("black", which(as.character(met_choices)%in% met[-1]))
+
+    col <- c("black", which(as.character(met_choices) %in% met[-1]))
     #1.  PC time series
     leg1 <- plot_compts(tab, mvar, col, showleg = FALSE, pc = npc2)
     plot.new()

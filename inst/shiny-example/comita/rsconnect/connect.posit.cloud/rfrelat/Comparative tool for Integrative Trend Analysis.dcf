@@ -1,0 +1,10 @@
+name: Comparative tool for Integrative Trend Analysis
+title: COMITA
+username: rfrelat
+account: rfrelat
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a1bf63-dd6d-b7f5-f82b-5dcbd3894058
+bundleId:
+url: https://connect.posit.cloud/rfrelat/content/01a1bf63-dd6d-b7f5-f82b-5dcbd3894058
+version: 1
